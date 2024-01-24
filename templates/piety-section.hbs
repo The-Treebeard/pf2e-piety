@@ -1,0 +1,69 @@
+<header>{{localize "Pf2ePiety.Piety"}}</header>
+<nav class="actions-nav sub-nav" data-group="piety-tabs"> {{! FIXME: Piety Tabs must be added, and needs local classes.}}
+    <a class="tab active" data-tab="piety-overview" data-group="piety-tabs">{{localize "Pf2ePiety.Overview"}}</a>
+    <a class="tab" data-tab="piety-details" data-group="piety-tabs">{{localize "Pf2ePiety.Details"}}</a>
+    <a class="tab" data-tab="piety-goals" data-group="piety-tabs">{{localize "Pf2ePiety.Goals"}}</a>
+</nav>
+<div class="detail deity{{#if deity}} selected{{/if}}">
+    {{> detailItem item=deity type="deity" compendium="pf2e.deities" showEmblem=deity}}
+</div>
+{{! FIXME: Modify to use Piety data.}}
+<div class="bio edicts" data-field="edicts" data-tooltip-direction="LEFT">
+    <div class="label-add">
+        <label
+            class="details-label"{{#if biography.edicts}}
+            for="{{document.uuid}}-edicts"{{/if}}
+        >{{localize "PF2E.BiographyEdicts"}}</label>
+        <a
+            data-action="add-edict-anathema"
+            data-tooltip="PF2E.Actor.Character.Biography.Edicts.Add"
+        ><i class="fa-solid fa-plus"></i></a>
+    </div>
+    <ol>
+        {{~#each biography.edicts as |line index|~}}
+            <li>
+                <input
+                    type="text"
+                    {{#if (eq index 0)}}id="{{../document.uuid}}-edicts"{{/if}}
+                    name="system.details.biography.edicts.{{index}}"
+                    value="{{line}}"
+                />
+                <a
+                    data-action="delete-edict-anathema"
+                    data-tooltip="PF2E.Actor.Character.Biography.Edicts.Delete"
+                    data-index="{{index}}"
+                ><i class="fa-solid fa-trash"></i></a>
+            </li>
+        {{/each}}
+    </ol>
+</div>
+<div class="bio anathema" data-field="anathema" data-tooltip-direction="LEFT">
+    <div class="label-add">
+        <label
+            class="details-label"
+            {{#if biography.anathema}}for="{{document.uuid}}-anathema"{{/if}}
+        >{{localize "PF2E.BiographyAnathema"}}</label>
+        <a
+            data-action="add-edict-anathema"
+            data-tooltip="PF2E.Actor.Character.Biography.Anathema.Add"
+        ><i class="fa-solid fa-plus"></i></a>
+    </div>
+    <ol>
+        {{~#each biography.anathema as |line index|~}}
+            <li>
+                <input
+                    type="text"
+                    {{#if (eq index 0)}}id="{{../document.uuid}}-anathema"{{/if}}
+                    name="system.details.biography.anathema.{{index}}"
+                    value="{{line}}"
+                />
+                <a
+                    data-action="delete-edict-anathema"
+                    data-tooltip="PF2E.Actor.Character.Biography.Anathema.Delete"
+                    data-index="{{index}}"
+                ><i class="fa-solid fa-trash"></i></a>
+            </li>
+        {{/each}}
+    </ol>
+</div>
+{{! End of Edicts/Anathemas EDIT}}

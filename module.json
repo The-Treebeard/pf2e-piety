@@ -1,0 +1,46 @@
+{
+  "id": "pf2e-piety",
+  "title": "Pf2e Piety",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "11",
+    "verified": "11"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "pf2e",
+        "type": "system",
+        "compatibility": {}
+      }
+    ]
+  },
+  "description": "This module adapts the Piety system from DnD5e using Pathfinder 2nd Edition's Victory Points subsystem.\nA Piety section is added to the Effects tab of the player character sheet, with the ability to drag and drop the deity and boons that the piety system grants.",
+  "authors": [
+    {
+      "name": "Treebeard"
+    }
+  ],
+  "esmodules": [],
+  "styles": [],
+  "packs": [
+    {
+      "name": "piety-information",
+      "label": "Piety Information",
+      "path": "packs/piety-information",
+      "type": "JournalEntry",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "languages": [
+        {
+          "lang": "en",
+          "name": "English",
+          "path": "lang/en.json"
+        }
+      ],
+      "system": "pf2e"
+    }
+  ]
+}
