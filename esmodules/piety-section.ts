@@ -17,4 +17,8 @@ Hooks.once('ready', Pf2ePiety.ready);
 
 // ADD: "dropover" event with dropTarget. See MonksAftermath.
 Hooks.on("renderCharacterSheetPf2e", async (charactersheet, html, data) => {
+  // Need const content.
+  $("div[data-field='pietyEdicts'] a[data-action='add-piety-edict-anathema']", content).on("click", async (event) => {
+    // EDIT: Add code here.
+  }
 }
