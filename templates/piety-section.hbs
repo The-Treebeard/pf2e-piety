@@ -8,35 +8,36 @@
     {{> detailItem item=deity type="deity" compendium="pf2e.deities" showEmblem=deity}}
 </div>
 {{! FIXME: Modify to use Piety data.}}
-<div class="bio edicts" data-field="edicts" data-tooltip-direction="LEFT">
+<div class="bio edicts" data-field="edicts" data-tooltip-direction="LEFT"> {{!FIXME: Add piety css, add pietyEdicts data-field}}
     <div class="label-add">
         <label
-            class="details-label"{{#if biography.edicts}}
-            for="{{document.uuid}}-edicts"{{/if}}
-        >{{localize "PF2E.BiographyEdicts"}}</label>
+            class="details-label"{{#if biography.edicts}} {{! add piety.edicts}}
+            for="{{document.uuid}}-edicts"{{/if}} {{!FIXME: Maybe change this?}}
+        >{{localize "Pf2ePiety.Edicts"}}</label>
         <a
-            data-action="add-edict-anathema"
-            data-tooltip="PF2E.Actor.Character.Biography.Edicts.Add"
+            data-action="add-edict-anathema" {{!FIXME: Make new data-action}}
+            data-tooltip="PF2E.Actor.Character.Biography.Edicts.Add" {{!FIXME: Make new tooltip}}
         ><i class="fa-solid fa-plus"></i></a>
     </div>
     <ol>
-        {{~#each biography.edicts as |line index|~}}
+        {{~#each biography.edicts as |line index|~}} {{!FIXME: change to piety.edicts}}
             <li>
                 <input
                     type="text"
-                    {{#if (eq index 0)}}id="{{../document.uuid}}-edicts"{{/if}}
-                    name="system.details.biography.edicts.{{index}}"
+                    {{#if (eq index 0)}}id="{{../document.uuid}}-edicts"{{/if}} {{!FIXME: Change}}
+                    name="system.details.biography.edicts.{{index}}" {{!FIXME: Change}}
                     value="{{line}}"
                 />
                 <a
-                    data-action="delete-edict-anathema"
-                    data-tooltip="PF2E.Actor.Character.Biography.Edicts.Delete"
+                    data-action="delete-edict-anathema" {{! FIXME: Add data-action}}
+                    data-tooltip="PF2E.Actor.Character.Biography.Edicts.Delete" {{! FIXME: Add tooltip}}
                     data-index="{{index}}"
                 ><i class="fa-solid fa-trash"></i></a>
             </li>
         {{/each}}
     </ol>
 </div>
+{{! FIXME: Make same changes to anathema as edicts. }}
 <div class="bio anathema" data-field="anathema" data-tooltip-direction="LEFT">
     <div class="label-add">
         <label
