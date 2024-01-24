@@ -8,14 +8,14 @@
     {{> detailItem item=deity type="deity" compendium="pf2e.deities" showEmblem=deity}}
 </div>
 {{! FIXME: Modify to use Piety data.}}
-<div class="bio edicts" data-field="edicts" data-tooltip-direction="LEFT"> {{!FIXME: Add piety css, add pietyEdicts data-field}}
+<div class="bio edicts" data-field="pietyEdicts" data-tooltip-direction="LEFT"> {{!FIXME: Add piety css, add pietyEdicts data-field}}
     <div class="label-add">
         <label
             class="details-label"{{#if biography.edicts}} {{! add piety.edicts}}
             for="{{document.uuid}}-edicts"{{/if}} {{!FIXME: Maybe change this?}}
         >{{localize "Pf2ePiety.Edicts"}}</label>
         <a
-            data-action="add-edict-anathema" {{!FIXME: Make new data-action}}
+            data-action="add-piety-edict-anathema" {{!FIXME: Make new data-action}}
             data-tooltip="PF2E.Actor.Character.Biography.Edicts.Add" {{!FIXME: Make new tooltip}}
         ><i class="fa-solid fa-plus"></i></a>
     </div>
@@ -29,7 +29,7 @@
                     value="{{line}}"
                 />
                 <a
-                    data-action="delete-edict-anathema" {{! FIXME: Add data-action}}
+                    data-action="delete-piety-edict-anathema" {{! FIXME: Add data-action}}
                     data-tooltip="PF2E.Actor.Character.Biography.Edicts.Delete" {{! FIXME: Add tooltip}}
                     data-index="{{index}}"
                 ><i class="fa-solid fa-trash"></i></a>
@@ -45,7 +45,7 @@
             {{#if biography.anathema}}for="{{document.uuid}}-anathema"{{/if}}
         >{{localize "PF2E.BiographyAnathema"}}</label>
         <a
-            data-action="add-edict-anathema"
+            data-action="add-piety-edict-anathema"
             data-tooltip="PF2E.Actor.Character.Biography.Anathema.Add"
         ><i class="fa-solid fa-plus"></i></a>
     </div>
@@ -59,7 +59,7 @@
                     value="{{line}}"
                 />
                 <a
-                    data-action="delete-edict-anathema"
+                    data-action="delete-piety-edict-anathema"
                     data-tooltip="PF2E.Actor.Character.Biography.Anathema.Delete"
                     data-index="{{index}}"
                 ><i class="fa-solid fa-trash"></i></a>
