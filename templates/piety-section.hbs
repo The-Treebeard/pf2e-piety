@@ -1,9 +1,10 @@
 <header>{{localize "Pf2ePiety.Piety"}}</header>
+<!-- Use Nav for PHASE 2
 <nav class="actions-nav sub-nav" data-group="piety-tabs"> {{! FIXME: Piety Tabs must be added, and needs local classes.}}
     <a class="tab active" data-tab="piety-overview" data-group="piety-tabs">{{localize "Pf2ePiety.Overview"}}</a>
     <a class="tab" data-tab="piety-details" data-group="piety-tabs">{{localize "Pf2ePiety.Details"}}</a>
     <a class="tab" data-tab="piety-goals" data-group="piety-tabs">{{localize "Pf2ePiety.Goals"}}</a>
-</nav>
+</nav>-->
 <div class="detail deity{{#if deity}} selected{{/if}}">
     {{> detailItem item=deity type="deity" compendium="pf2e.deities" showEmblem=deity}}
 </div>
