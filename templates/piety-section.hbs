@@ -67,5 +67,20 @@
             </li>
         {{/each}}
     </ol>
+    {{! End of Edicts/Anathemas EDIT}}
+    {{! Piety Thresholds }}
+    <ol>
+        <li>
+            <p>{{localize "Pf2ePiety.Piety"}} {{game.settings.settings.get('pf2e-piety.first-threshold').value}}</p>
+        </li>
+        <li>
+            <p>{{localize "Pf2ePiety.Piety"}} {{game.settings.settings.get('pf2e-piety.second-threshold').value}}</p>
+        </li>
+        <li>
+            <p>{{localize "Pf2ePiety.Piety"}} {{game.settings.settings.get('pf2e-piety.third-threshold').value}}</p>
+        </li>
+        <li>
+            <p>{{localize "Pf2ePiety.Piety"}} {{game.settings.settings.get('pf2e-piety.fourth-threshold').value}}</p>
+        </li>
+    </ol>
 </div>
-{{! End of Edicts/Anathemas EDIT}}
