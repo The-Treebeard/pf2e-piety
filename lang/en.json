@@ -3,7 +3,11 @@
     "Pf2ePiety.Overview": "Overview",
     "Pf2ePiety.Details": "Details",
     "Pf2ePiety.Goals": "Goals",
+    "Pf2ePiety.MissingDeity": "No deity selected.",
     "Pf2ePiety.Edicts": "Edicts",
     "Pf2ePiety.Anathema": "Anathema",
-    "Pf2ePiety.Obstacles": "Obstacles"
+    "Pf2ePiety.Obstacles": "Obstacles",
+    "Pf2ePiety.Threshold": "Threshold",
+    "Pf2ePiety.BoonHint": "Add Piety Boon here.",
+    "Pf2ePiety.CurseHint": "Add Piety Curse here."
 }
