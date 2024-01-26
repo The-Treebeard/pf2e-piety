@@ -5,6 +5,14 @@ A Piety section is added to the Effects tab of a character sheet, just below Div
 
 There is also the ability drag Deity Boons (or Curses) to slots corresponding to the Piety thresholds.
 
+---
+
+## Using the Piety System
+
+Piety represents a player character's devotion to their deity, and their deity's favor with that hero. As the player follows the edicts of their deity, they gain Piety Points, which grant them Deity Boons (see [Divine Intercession](https://2e.aonprd.com/Rules.aspx?ID=804) in Archives of Nethys) at certain thresholds.
+
+Typically player characters will progress at an average of 1 Piety Point per session, though the actual progression is up to the GM. The typical thresholds are at 3, 10, 25, and 50 Piety.
+
 <!-- PHASE 1:
 - One tab (Overview)
 -- Have Current Deity, option to add edicts and anathema, and drag and drop Deity Boons to thresholds.
