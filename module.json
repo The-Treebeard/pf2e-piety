@@ -21,7 +21,7 @@
       "name": "Treebeard"
     }
   ],
-  "esmodules": [],
+  "esmodules": ["scripts/settings.ts", "scripts/piety-section.ts"],
   "styles": [],
   "packs": [
     {
