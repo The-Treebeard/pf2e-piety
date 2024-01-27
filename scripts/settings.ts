@@ -11,7 +11,7 @@ export const registerSettings = function() {
     config: true,
     requiresReload: true,
     type: Number,
-    range: {             // If range is specified, the resulting setting will be a range slider
+    range: {             /
       min: 1,
       max: 50,
       step: 1
