@@ -39,7 +39,7 @@ export const registerSettings = function() {
     }
   });
   game.settings.register(moduleName, "third-threshold", {
-    name: "First Threshold",
+    name: "Third Threshold",
     hint: "The Piety score players must reach to get their third Deity Boon.",
     scope: "world",
     config: true,
