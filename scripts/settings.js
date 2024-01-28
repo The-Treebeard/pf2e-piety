@@ -11,11 +11,11 @@ export const registerSettings = function() {
     config: true,
     requiresReload: true,
     type: Number,
-    range: {             /
+    range: {
       min: 1,
       max: 50,
       step: 1
-    }
+    },
     default: 3,
     onChange: (value) => {
       game.user.setFlag("pf2e-piety", "threshold1", value);
@@ -28,11 +28,11 @@ export const registerSettings = function() {
     config: true,
     requiresReload: true,
     type: Number,
-    range: {             // If range is specified, the resulting setting will be a range slider
+    range: {
       min: 1,
       max: 50,
       step: 1
-    }
+    },
     default: 10,
     onChange: (value) => {
       game.user.setFlag("pf2e-piety", "threshold2", value);
@@ -45,11 +45,11 @@ export const registerSettings = function() {
     config: true,
     requiresReload: true,
     type: Number,
-    range: {             // If range is specified, the resulting setting will be a range slider
+    range: {
       min: 1,
       max: 50,
       step: 1
-    }
+    },
     default: 25,
     onChange: (value) => {
       game.user.setFlag("pf2e-piety", "threshold3", value);
@@ -62,11 +62,11 @@ export const registerSettings = function() {
     config: true,
     requiresReload: true,
     type: Number,
-    range: {             // If range is specified, the resulting setting will be a range slider
+    range: {
       min: 1,
       max: 50,
       step: 1
-    }
+    },
     default: 50,
     onChange: (value) => {
       game.user.setFlag("pf2e-piety", "threshold4", value);

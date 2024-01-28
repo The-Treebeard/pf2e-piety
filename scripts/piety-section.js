@@ -8,7 +8,7 @@
 - Reference my settings.ts to get the numbers for Piety threshhold.
 */
 
-import {registerSettings } from "./settings.ts";
+import {registerSettings } from "./settings.js";
 
 export let setting = key => {
   return game.settings.get("pf2e-piety", key);
