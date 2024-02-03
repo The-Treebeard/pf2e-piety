@@ -24,32 +24,32 @@ export class Pf2ePiety {
     Pf2ePiety.SOCKET = "module.pf2e-piety";
   }
 
-  static async onMessage(data) {
+  /*static async onMessage(data) {
     switch (data.action) {
         case 'sendMessage': {
             if (setting("notification-on-advance"))
                 ui.notifications.info(data.message);
         }
     }
-}
+  }*/
 
-  static ready() {
+  /*static ready() {
     game.socket.on(Pf2ePiety.SOCKET, Pf2ePiety.onMessage);
-  }
+  }*/
 }
 console.log("Starting Hooks.");
 Hooks.once('init', Pf2ePiety.init);
-Hooks.once('ready', Pf2ePiety.ready);
+// Hooks.once('ready', Pf2ePiety.ready);
 
 // ADD: "dropover" event with dropTarget. See MonksAftermath.
 Hooks.on("renderPartySheetPF2e", async (charactersheet, html, data) => {
   const edicts = app.document.flags?.piety?.edicts ?? [];
   // Append piety-section.hbs to below Divine Intercession list.
-  let pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs'); // FIXME: Needs second argument of data.
+  let pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs'); // FIXME: Needs second argument of data. { piety: #, edicts: []}
   let divineList = html.querySelectorAll('.effects .effects-list');
   divineList[divineList.length-1].insertAdjacentHTML('afterend', pietyTemplate);
   
-  $("div[data-field='pietyEdicts'] a[data-action='add-piety-edict-anathema']", content).on("click", async (event) => {
+  $("div[data-field='pietyEdicts'] a[data-action='add-piety-edict-anathema']").on("click", async (event) => {
     await setFlag("pf2e-piety", "edicts", "edicts.push()");
   });
 });
