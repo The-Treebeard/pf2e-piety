@@ -42,10 +42,13 @@ Hooks.once('init', Pf2ePiety.init);
 // Hooks.once('ready', Pf2ePiety.ready);
 
 // ADD: "dropover" event with dropTarget. See MonksAftermath.
-Hooks.on("renderPartySheetPF2e", async (charactersheet, html, data) => {
-  const edicts = app.document.flags?.piety?.edicts ?? [];
+Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
+  const edicts = charactersheet.actor.flags?.piety?.edicts ?? [];
   // Append piety-section.hbs to below Divine Intercession list.
-  let pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs'); // FIXME: Needs second argument of data. { piety: #, edicts: []}
+  let pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs', { // FIXME: Uncaught (in promise) Error: Parse error on line 74: hbs
+    piety: 1, // FIXME: Needs piety flag that can be updated.
+    edicts: edicts
+  });
   let divineList = html.querySelectorAll('.effects .effects-list');
   divineList[divineList.length-1].insertAdjacentHTML('afterend', pietyTemplate);
   
