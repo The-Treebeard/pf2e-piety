@@ -6,7 +6,7 @@
     <a class="tab" data-tab="piety-goals" data-group="piety-tabs">{{localize "Pf2ePiety.Goals"}}</a>
 </nav>-->
 <div class="detail deity{{#if deity}} selected{{/if}}">
-    {{> detailItem item=deity type="deity" compendium="pf2e.deities" showEmblem=deity}}
+    {{> detailItem item=deity type="deity" compendium="pf2e.deities" showEmblem=deity}} {{! See inline "detailItem" at the end of the file.}}
 </div>
 {{! FIXME: Modify to use Piety data.}}
 <div class="bio edicts" data-field="pietyEdicts" data-tooltip-direction="LEFT"> {{!FIXME: Add piety css, add pietyEdicts data-field}}
@@ -44,7 +44,7 @@
         <label
             class="details-label"
             {{#if biography.anathema}}for="{{document.uuid}}-anathema"{{/if}}
-        >{{localize "PF2ePiety.Anathema"}}</label>
+        >{{localize "Pf2ePiety.Anathema"}}</label>
         <a
             data-action="add-piety-edict-anathema"
             data-tooltip="PF2E.Actor.Character.Biography.Anathema.Add"
@@ -71,16 +71,35 @@
     {{! Piety Thresholds }}
     <ol>
         <li>
-            <p>{{localize "Pf2ePiety.Piety"}} {{game.settings.settings.get('pf2e-piety.first-threshold').value}}</p>
+            <p>{{localize "Pf2ePiety.Piety"}} {{threshold1}}</p>
         </li>
         <li>
-            <p>{{localize "Pf2ePiety.Piety"}} {{game.settings.settings.get('pf2e-piety.second-threshold').value}}</p>
+            <p>{{localize "Pf2ePiety.Piety"}} {{threshold2}}</p>
         </li>
         <li>
-            <p>{{localize "Pf2ePiety.Piety"}} {{game.settings.settings.get('pf2e-piety.third-threshold').value}}</p>
+            <p>{{localize "Pf2ePiety.Piety"}} {{threshold3}}</p>
         </li>
         <li>
-            <p>{{localize "Pf2ePiety.Piety"}} {{game.settings.settings.get('pf2e-piety.fourth-threshold').value}}</p>
+            <p>{{localize "Pf2ePiety.Piety"}} {{threshold4}}</p>
         </li>
     </ol>
 </div>
+
+{{#*inline "detailItem"}}
+    <span class="details-label">{{localize (concat "TYPES.Item." type)}}</span>
+    <h3>
+        <span class="value">{{item.name}}</span>
+        {{#if @root.editable}}
+            {{#if item}}
+                <span class="detail-item-control" data-item-id="{{item.id}}"><i class="fa-solid fa-fw fa-ellipsis-v"></i></span>
+            {{else}}
+                <a data-action="open-compendium" data-compendium={{compendium}}><i class="fa-solid fa-fw fa-search"></i></a>
+            {{/if}}
+        {{/if}}
+        {{#if showEmblem}}
+            <div class="emblem">
+                <img src="{{item.img}}" alt="{{item.name}}" />
+            </div>
+        {{/if}}
+    </h3>
+{{/inline}}

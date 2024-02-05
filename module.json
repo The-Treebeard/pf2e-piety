@@ -32,17 +32,17 @@
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
-      },
-      "languages": [
-        {
-          "lang": "en",
-          "name": "English",
-          "path": "lang/en.json"
-        }
-      ],
-      "system": "pf2e"
+      }
     }
   ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "system": "pf2e",
   "url": "https://github.com/13jtibbitts/pf2e-piety",
   "license": "/LICENSE",
   "readme": "/README.md"

@@ -45,11 +45,15 @@ Hooks.once('init', Pf2ePiety.init);
 Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   const edicts = charactersheet.actor.flags?.piety?.edicts ?? [];
   // Append piety-section.hbs to below Divine Intercession list.
-  let pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs', { // FIXME: Uncaught (in promise) Error: Parse error on line 74: hbs
+  let pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs', {
     piety: 1, // FIXME: Needs piety flag that can be updated.
-    edicts: edicts
+    edicts: edicts,
+    threshold1: game.settings.get('pf2e-piety','first-threshold'),
+    threshold2: game.settings.get('pf2e-piety','second-threshold'),
+    threshold3: game.settings.get('pf2e-piety','third-threshold'),
+    threshold4: game.settings.get('pf2e-piety','fourth-threshold')
   });
-  let divineList = html.querySelectorAll('.effects .effects-list');
+  let divineList = $('section.tab.effects ol.effects-list');
   divineList[divineList.length-1].insertAdjacentHTML('afterend', pietyTemplate);
   
   $("div[data-field='pietyEdicts'] a[data-action='add-piety-edict-anathema']").on("click", async (event) => {
