@@ -5,13 +5,22 @@
     <a class="tab" data-tab="piety-details" data-group="piety-tabs">{{localize "Pf2ePiety.Details"}}</a>
     <a class="tab" data-tab="piety-goals" data-group="piety-tabs">{{localize "Pf2ePiety.Goals"}}</a>
 </nav>-->
-<div class="piety-main"> {{! FIXME: module CSS not connected.}}
-    <div class="detail deity{{#if deity}} selected{{/if}}">
-        {{> detailItem item=deity type="deity" compendium="pf2e.deities" showEmblem=deity}} {{! See inline "detailItem" at the end of the file.}}
+<div class="piety-main">
+    <div> {{! FIXME: Add current Deity's name or DeityMissing, then add deity icon. See detailItem at the end of this file.}}
+        <h2 class="piety-score-heading">
+            <span>{{localize "Pf2ePiety.Deity"}}</span>
+        </h2>
+        <h3 class="value">
+            <span>{{deity}}</span>
+        </h3>
     </div>
-    <div>
-        <h2>{{localize "Pf2ePiety.Piety"}}</h2>
-        <h3>{{piety}}</h3>
+    <div class="attribute">
+        <h2 class="piety-score-heading">
+            <span>{{localize "Pf2ePiety.Piety"}}</span>
+        </h2>
+        <h3 class="piety-score-modifier" aria-label="Pf2ePiety.Piety">
+            {{piety}}
+        </h3>
     </div>
 </div>
 {{! FIXME: Modify to use Piety data.}}

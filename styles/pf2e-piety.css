@@ -3,3 +3,30 @@
     flex-direction: row;
     justify-content: space-around;
 }
+
+.piety-score-heading {
+    border: none;
+    color: var(--color-pf-primary);
+    font: 400 var(--font-size-22) var(--serif-condensed);
+    margin: 0;
+    padding: 0;
+    position: relative;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.piety-score-modifier {
+    border-image-repeat: repeat;
+    border-image-slice: 11;
+    border-image-source: url(../../../systems/pf2e/assets/sheet/frame-elegant.svg);
+    border-image-width: 14px;
+    border-style: double;
+    align-items: center;
+    display: flex;
+    font: 700 var(--font-size-24) var(--serif);
+    height: 2.875rem;
+    justify-content: center;
+    margin: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+}

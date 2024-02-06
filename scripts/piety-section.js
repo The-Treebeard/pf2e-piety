@@ -46,6 +46,7 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   const edicts = charactersheet.actor.flags?.piety?.edicts ?? [];
   // Append piety-section.hbs to below Divine Intercession list.
   let pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs', {
+    deity: charactersheet.actor.deity.name,
     piety: 1, // FIXME: Needs piety flag that can be updated.
     edicts: edicts,
     threshold1: game.settings.get('pf2e-piety','first-threshold'),
