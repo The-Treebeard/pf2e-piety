@@ -4,6 +4,30 @@
     justify-content: space-around;
 }
 
+.deity-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+}
+
+.deity-emblem {
+    flex: 0 0 1.75rem;
+    margin: 0 calc(-1 * var(--space-3)) 0 var(--space-4);
+    position: relative;
+}
+
+.deity-emblem img {
+    border: none;
+    box-shadow: 0 0 0 1px #918c88, 0 0 0 2px #e1d8cf, 0 0 0 3px #a98f39, inset 0 0 8px rgba(0, 0, 0, 0.5), 0 0 8px black;
+    border-radius: 50%;
+    height: 1.75rem;
+    left: calc(-1 * var(--space-4));
+    position: absolute;
+    top: calc(-1 * var(--space-14));
+    width: 1.75rem;
+}
+
 .piety-score-heading {
     border: none;
     color: var(--color-pf-primary);
@@ -16,6 +40,13 @@
 }
 
 .piety-score-modifier {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+}
+
+.piety-score-modifier h3 {
     border-image-repeat: repeat;
     border-image-slice: 11;
     border-image-source: url(../../../systems/pf2e/assets/sheet/frame-elegant.svg);
