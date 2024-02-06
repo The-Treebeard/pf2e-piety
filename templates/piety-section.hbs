@@ -5,8 +5,14 @@
     <a class="tab" data-tab="piety-details" data-group="piety-tabs">{{localize "Pf2ePiety.Details"}}</a>
     <a class="tab" data-tab="piety-goals" data-group="piety-tabs">{{localize "Pf2ePiety.Goals"}}</a>
 </nav>-->
-<div class="detail deity{{#if deity}} selected{{/if}}">
-    {{> detailItem item=deity type="deity" compendium="pf2e.deities" showEmblem=deity}} {{! See inline "detailItem" at the end of the file.}}
+<div class="piety-main"> {{! FIXME: module CSS not connected.}}
+    <div class="detail deity{{#if deity}} selected{{/if}}">
+        {{> detailItem item=deity type="deity" compendium="pf2e.deities" showEmblem=deity}} {{! See inline "detailItem" at the end of the file.}}
+    </div>
+    <div>
+        <h2>{{localize "Pf2ePiety.Piety"}}</h2>
+        <h3>{{piety}}</h3>
+    </div>
 </div>
 {{! FIXME: Modify to use Piety data.}}
 <div class="bio edicts" data-field="pietyEdicts" data-tooltip-direction="LEFT"> {{!FIXME: Add piety css, add pietyEdicts data-field}}

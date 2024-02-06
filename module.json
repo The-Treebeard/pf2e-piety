@@ -21,8 +21,12 @@
       "name": "Treebeard"
     }
   ],
-  "esmodules": ["scripts/piety-section.js"],
-  "styles": [],
+  "esmodules": [
+    "scripts/piety-section.js"
+  ],
+  "styles": [
+    "styles/pf2e-piety.css"
+  ],
   "packs": [
     {
       "name": "piety-information",
