@@ -35,20 +35,22 @@
     </div>
 </div>
 {{! FIXME: Modify to use Piety data.}}
-<div class="bio edicts" data-field="pietyEdicts" data-tooltip-direction="LEFT"> {{!FIXME: Add piety css, add pietyEdicts data-field}}
-    <div class="label-add">
+<div class="bio edicts" data-field="edicts" data-tooltip-direction="LEFT"> {{!FIXME: Add piety css, add pietyEdicts data-field}}
+    <div class="label-add edict-anathema">
         <label
-            class="details-label"{{#if biography.edicts}} {{! add piety.edicts}}
+            class="details-label"
+            {{#if biography.edicts}} {{! add piety.edicts}}
             for="{{document.uuid}}-edicts"{{/if}} {{!FIXME: Maybe change this?}}
         >{{localize "Pf2ePiety.Edicts"}}</label>
         <a
             data-action="add-piety-edict-anathema"
-            data-tooltip="PF2E.Actor.Character.Biography.Edicts.Add" {{!FIXME: Make new tooltip}}
+            data-tooltip="PF2E.Actor.Character.Biography.Edicts.Add"
         ><i class="fa-solid fa-plus"></i></a>
     </div>
     <ol>
-        {{~#each edicts as |line index|~}} {{!FIXME: change to piety.edicts}}
-            <li>
+        {{~#each edicts as |line index|~}}
+            <li class="edict-anathema">
+                <p>{{increment index}}.</p>
                 <input
                     type="text"
                     {{#if (eq index 0)}}id="{{../document.uuid}}-edicts"{{/if}} {{!FIXME: Change}}
@@ -56,8 +58,8 @@
                     value="{{line}}"
                 />
                 <a
-                    data-action="delete-piety-edict-anathema" {{! FIXME: Add data-action}}
-                    data-tooltip="PF2E.Actor.Character.Biography.Edicts.Delete" {{! FIXME: Add tooltip}}
+                    data-action="delete-piety-edict-anathema"
+                    data-tooltip="PF2E.Actor.Character.Biography.Edicts.Delete"
                     data-index="{{index}}"
                 ><i class="fa-solid fa-trash"></i></a>
             </li>
@@ -66,10 +68,11 @@
 </div>
 {{! FIXME: Make same changes to anathema as edicts. }}
 <div class="bio anathema" data-field="anathema" data-tooltip-direction="LEFT">
-    <div class="label-add">
+    <div class="label-add edict-anathema">
         <label
             class="details-label"
-            {{#if biography.anathema}}for="{{document.uuid}}-anathema"{{/if}}
+            {{#if biography.anathema}}
+            for="{{document.uuid}}-anathema"{{/if}}
         >{{localize "Pf2ePiety.Anathema"}}</label>
         <a
             data-action="add-piety-edict-anathema"
@@ -77,12 +80,13 @@
         ><i class="fa-solid fa-plus"></i></a>
     </div>
     <ol>
-        {{~#each biography.anathema as |line index|~}}
-            <li>
+        {{~#each anathema as |line index|~}}
+            <li class="edict-anathema">
+                <p>{{increment index}}.</p>
                 <input
                     type="text"
                     {{#if (eq index 0)}}id="{{../document.uuid}}-anathema"{{/if}}
-                    name="system.details.biography.anathema.{{index}}"
+                    name="character.flags['pf2e-piety'].anathema.{{index}}"
                     value="{{line}}"
                 />
                 <a

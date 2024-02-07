@@ -46,16 +46,23 @@ Hooks.once('init', Pf2ePiety.init);
 
 // ADD: "dropover" event with dropTarget. See MonksAftermath.
 Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
+  Handlebars.registerHelper('increment', (aString) => {
+    return parseInt(aString)+1;
+  })
+
   const character = charactersheet.actor;
-  const edicts = character.flags["pf2e-piety"]?.edicts ?? [];
+  var edicts = character.flags["pf2e-piety"]?.edicts ?? [];
+  var anathema = character.flags["pf2e-piety"]?.anathema ?? [];
   let score = character.flags["pf2e-piety"]?.pietyScore ?? 1;
   character.setFlag('pf2e-piety', 'pietyScore', score);
   character.setFlag('pf2e-piety', 'edicts', edicts);
+  character.setFlag('pf2e-piety', 'anathema', anathema);
   // Append piety-section.hbs to below Divine Intercession list.
-  let pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs', {
+  var pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs', {
     deity: character.deity,
-    piety: score, // FIXME: Needs piety flag that can be updated.
+    piety: score,
     edicts: edicts,
+    anathema: anathema,
     threshold1: game.settings.get('pf2e-piety','first-threshold'),
     threshold2: game.settings.get('pf2e-piety','second-threshold'),
     threshold3: game.settings.get('pf2e-piety','third-threshold'),
@@ -64,14 +71,7 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   let divineList = $('section.tab.effects ol.effects-list');
   divineList[divineList.length-1].insertAdjacentHTML('afterend', pietyTemplate);
   
-  $("div[data-field='pietyEdicts'] a[data-action='add-piety-edict-anathema']").on("click", async (event) => {
-    character.flags['pf2e-piety'].edicts.push(""); // FIXME: It pushes, but each indexed item can't be edited, and it doesn't appear immediately.
-  });
-
-  $("div[data-field='pietyEdicts'] a[data-action='delete-piety-edict-anathema']").on("click", async (event) => {
-    character.flags['pf2e-piety'].edicts.splice(data-index, 1); // FIXME: ReferenceError: index is not defined
-  })
-
+  // Piety Score Updates
   $("div.piety-score-modifier button[data-action='piety-score-decrease']").on("click", async (event) => {
     if (character.getFlag('pf2e-piety', 'pietyScore') > 1) {
       await character.setFlag("pf2e-piety", "pietyScore", character.flags["pf2e-piety"]?.pietyScore-1);
@@ -80,5 +80,29 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
 
   $("div.piety-score-modifier button[data-action='piety-score-increase']").on("click", async (event) => {
     await character.setFlag("pf2e-piety", "pietyScore", character.flags["pf2e-piety"]?.pietyScore+1);
+  });
+
+  // Edicts/Anathema Updates
+  $("div[data-field] a[data-action='add-piety-edict-anathema']").on("click", async (html) => {
+    if ($(html.target).parents('div[data-field]').data('field') == 'edicts') {
+    await character.flags['pf2e-piety'].edicts.push(""); // FIXME: Pushes, but can't be edited.
+    character.setFlag('pf2e-piety', 'edicts', character.flags['pf2e-piety'].edicts); // FIXME: There has to be a better way to do this.
+    }
+    else if ($(html.target).parents('div[data-field]').data('field') == 'anathema') {
+      await character.flags['pf2e-piety'].anathema.push(""); // FIXME: Pushes, but can't be edited.
+      character.setFlag('pf2e-piety', 'anathema', character.flags['pf2e-piety'].anathema); // FIXME: There has to be a better way to do this.  
+    }
+  });
+
+  $("div[data-field] a[data-action='delete-piety-edict-anathema']").on("click", async (html) => {
+    let index = parseInt($(event.target).data('index'));
+    if ($(html.target).parents('div[data-field]').data('field') == 'edicts') {
+    await character.flags['pf2e-piety'].edicts.splice(index, 1); // FIXME: Doesn't disappear immediately.
+    character.setFlag('pf2e-piety', 'edicts', character.flags['pf2e-piety'].edicts);
+    }
+    else if ($(html.target).parents('div[data-field]').data('field') == 'anathema') {
+      await character.flags['pf2e-piety'].anathema.splice(index, 1); // FIXME: Doesn't disappear immediately.
+      character.setFlag('pf2e-piety', 'anathema', character.flags['pf2e-piety'].anathema);
+    }
   });
 });

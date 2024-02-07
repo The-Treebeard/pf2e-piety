@@ -62,3 +62,9 @@
     padding-right: 15px;
     padding-left: 15px;
 }
+
+.edict-anathema {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
