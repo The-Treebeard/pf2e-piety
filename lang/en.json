@@ -1,15 +1,17 @@
 {
-    "Pf2ePiety.Piety": "Piety",
-    "Pf2ePiety.Overview": "Overview",
-    "Pf2ePiety.Details": "Details",
-    "Pf2ePiety.Goals": "Goals",
-    "Pf2ePiety.Deity": "Deity",
-    "Pf2ePiety.PietyScore": "Piety Score",
-    "Pf2ePiety.MissingDeity": "No deity selected.",
-    "Pf2ePiety.Edicts": "Edicts",
-    "Pf2ePiety.Anathema": "Anathema",
-    "Pf2ePiety.Obstacles": "Obstacles",
-    "Pf2ePiety.Threshold": "Threshold",
-    "Pf2ePiety.BoonHint": "Add Piety Boon here.",
-    "Pf2ePiety.CurseHint": "Add Piety Curse here."
+    "Pf2ePiety": {
+        "Piety": "Piety",
+        "Overview": "Overview",
+        "Details": "Details",
+        "Goals": "Goals",
+        "Deity": "Deity",
+        "PietyScore": "Piety Score",
+        "MissingDeity": "No Deity Selected",
+        "Edicts": "Edicts",
+        "Anathema": "Anathema",
+        "Obstacles": "Obstacles",
+        "Threshold": "Threshold",
+        "BoonHint": "Add Piety Boon here.",
+        "CurseHint": "Add Piety Curse here."
+    }
 }

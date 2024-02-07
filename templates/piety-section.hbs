@@ -10,23 +10,27 @@
         <h2 class="piety-score-heading">
             <span>{{localize "Pf2ePiety.Deity"}}</span>
         </h2>
-        <h3 class="attribute deity-info">
-            <span>{{deity.name}}</span>
-            <div class="deity-emblem">
-                <img src="{{deity.img}}" alt="{{deity.name}}" />
-            </div>
-        </h3>
+        {{#if deity}}
+            <h3 class="attribute deity-info">
+                <span>{{deity.name}}</span>
+                <div class="deity-emblem">
+                    <img src="{{deity.img}}" alt="{{deity.name}}" />
+                </div>
+            </h3>
+        {{else}}
+            <h3>{{localize "Pf2ePiety.MissingDeity"}}</h3>
+        {{/if}}
     </div>
     <div class="attribute">
         <h2 class="piety-score-heading">
             <span>{{localize "Pf2ePiety.PietyScore"}}</span>
         </h2>
         <div class="piety-score-modifier">
-            <button>-</button>
+            <button type="button" data-action="piety-score-decrease">-</button>
             <h3 aria-label="Pf2ePiety.Piety">
                 {{piety}}
             </h3>
-            <button>+</button>
+            <button type="button" data-action="piety-score-increase">+</button>
         </div>
     </div>
 </div>
@@ -38,17 +42,17 @@
             for="{{document.uuid}}-edicts"{{/if}} {{!FIXME: Maybe change this?}}
         >{{localize "Pf2ePiety.Edicts"}}</label>
         <a
-            data-action="add-piety-edict-anathema" {{!FIXME: Make new data-action}}
+            data-action="add-piety-edict-anathema"
             data-tooltip="PF2E.Actor.Character.Biography.Edicts.Add" {{!FIXME: Make new tooltip}}
         ><i class="fa-solid fa-plus"></i></a>
     </div>
     <ol>
-        {{~#each biography.edicts as |line index|~}} {{!FIXME: change to piety.edicts}}
+        {{~#each edicts as |line index|~}} {{!FIXME: change to piety.edicts}}
             <li>
                 <input
                     type="text"
                     {{#if (eq index 0)}}id="{{../document.uuid}}-edicts"{{/if}} {{!FIXME: Change}}
-                    name="system.details.biography.edicts.{{index}}" {{!FIXME: Change}}
+                    name="character.flags['pf2e-piety'].edicts.{{index}}" {{!FIXME: Change}}
                     value="{{line}}"
                 />
                 <a

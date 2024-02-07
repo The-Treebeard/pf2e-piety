@@ -24,6 +24,9 @@ export class Pf2ePiety {
     Pf2ePiety.SOCKET = "module.pf2e-piety";
   }
 
+  static incrementPiety(actor, amount) {
+    actor.setFlag("pf2e-piety", pietyScore, pietyScore + amount);
+  }
   /*static async onMessage(data) {
     switch (data.action) {
         case 'sendMessage': {
@@ -43,11 +46,15 @@ Hooks.once('init', Pf2ePiety.init);
 
 // ADD: "dropover" event with dropTarget. See MonksAftermath.
 Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
-  const edicts = charactersheet.actor.flags?.piety?.edicts ?? [];
+  const character = charactersheet.actor;
+  const edicts = character.flags["pf2e-piety"]?.edicts ?? [];
+  let score = character.flags["pf2e-piety"]?.pietyScore ?? 1;
+  character.setFlag('pf2e-piety', 'pietyScore', score);
+  character.setFlag('pf2e-piety', 'edicts', edicts);
   // Append piety-section.hbs to below Divine Intercession list.
   let pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs', {
-    deity: charactersheet.actor.deity,
-    piety: 1, // FIXME: Needs piety flag that can be updated.
+    deity: character.deity,
+    piety: score, // FIXME: Needs piety flag that can be updated.
     edicts: edicts,
     threshold1: game.settings.get('pf2e-piety','first-threshold'),
     threshold2: game.settings.get('pf2e-piety','second-threshold'),
@@ -58,6 +65,20 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   divineList[divineList.length-1].insertAdjacentHTML('afterend', pietyTemplate);
   
   $("div[data-field='pietyEdicts'] a[data-action='add-piety-edict-anathema']").on("click", async (event) => {
-    await setFlag("pf2e-piety", "edicts", "edicts.push()");
+    character.flags['pf2e-piety'].edicts.push(""); // FIXME: It pushes, but each indexed item can't be edited, and it doesn't appear immediately.
+  });
+
+  $("div[data-field='pietyEdicts'] a[data-action='delete-piety-edict-anathema']").on("click", async (event) => {
+    character.flags['pf2e-piety'].edicts.splice(data-index, 1); // FIXME: ReferenceError: index is not defined
+  })
+
+  $("div.piety-score-modifier button[data-action='piety-score-decrease']").on("click", async (event) => {
+    if (character.getFlag('pf2e-piety', 'pietyScore') > 1) {
+      await character.setFlag("pf2e-piety", "pietyScore", character.flags["pf2e-piety"]?.pietyScore-1);
+    }
+  });
+
+  $("div.piety-score-modifier button[data-action='piety-score-increase']").on("click", async (event) => {
+    await character.setFlag("pf2e-piety", "pietyScore", character.flags["pf2e-piety"]?.pietyScore+1);
   });
 });
