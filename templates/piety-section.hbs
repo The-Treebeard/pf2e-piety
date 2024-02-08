@@ -6,7 +6,7 @@
     <a class="tab" data-tab="piety-goals" data-group="piety-tabs">{{localize "Pf2ePiety.Goals"}}</a>
 </nav>-->
 <div class="piety-main">
-    <div> {{! FIXME: Add current Deity's name or DeityMissing, then add deity icon. See detailItem at the end of this file.}}
+    <div>
         <h2 class="piety-score-heading">
             <span>{{localize "Pf2ePiety.Deity"}}</span>
         </h2>
@@ -34,13 +34,14 @@
         </div>
     </div>
 </div>
-{{! FIXME: Modify to use Piety data.}}
-<div class="bio edicts" data-field="edicts" data-tooltip-direction="LEFT"> {{!FIXME: Add piety css, add pietyEdicts data-field}}
+<!-- <div>{{{deity.system.description.value}}}</div> {{! Add to Details Tab for Phase 2. }}-->
+{{! Edicts and Anathema}}
+<div class="bio edicts" data-field="edicts" data-tooltip-direction="LEFT">
     <div class="label-add edict-anathema">
         <label
             class="details-label"
-            {{#if biography.edicts}} {{! add piety.edicts}}
-            for="{{document.uuid}}-edicts"{{/if}} {{!FIXME: Maybe change this?}}
+            {{#if edicts}}
+            for="{{document.uuid}}-piety-edicts"{{/if}}
         >{{localize "Pf2ePiety.Edicts"}}</label>
         <a
             data-action="add-piety-edict-anathema"
@@ -54,7 +55,7 @@
                 <input
                     type="text"
                     {{#if (eq index 0)}}id="{{../document.uuid}}-edicts"{{/if}} {{!FIXME: Change}}
-                    name="character.flags['pf2e-piety'].edicts.{{index}}" {{!FIXME: Change}}
+                    name="character.flags['pf2e-piety'].edicts.{{index}}"
                     value="{{line}}"
                 />
                 <a
@@ -66,13 +67,12 @@
         {{/each}}
     </ol>
 </div>
-{{! FIXME: Make same changes to anathema as edicts. }}
 <div class="bio anathema" data-field="anathema" data-tooltip-direction="LEFT">
     <div class="label-add edict-anathema">
         <label
             class="details-label"
             {{#if biography.anathema}}
-            for="{{document.uuid}}-anathema"{{/if}}
+            for="{{document.uuid}}-piety-anathema"{{/if}}
         >{{localize "Pf2ePiety.Anathema"}}</label>
         <a
             data-action="add-piety-edict-anathema"
@@ -97,7 +97,6 @@
             </li>
         {{/each}}
     </ol>
-    {{! End of Edicts/Anathemas EDIT}}
     {{! Piety Thresholds }}
     <ol>
         <li>
@@ -113,16 +112,5 @@
             <p>{{localize "Pf2ePiety.Piety"}} {{threshold4}}</p>
         </li>
     </ol>
+    {{! EDIT: Add Feat-Slot partials similar to pf2e's feat-slot.hbs }}
 </div>
-
-{{#*inline "detailItem"}}
-   <h2 class="piety-score-heading">{{localize "Pf2ePiety.Deity"}}</h2>
-    <h3>
-        <span class="value">{{deity.name}}</span>
-        {{#if showEmblem}}
-            <div class="emblem">
-                <img src="{{deity.img}}" alt="{{deity.name}}" />
-            </div>
-        {{/if}}
-    </h3>
-{{/inline}}
