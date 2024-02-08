@@ -81,6 +81,7 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   $("div.piety-score-modifier button[data-action='piety-score-increase']").on("click", async (event) => {
     await character.setFlag("pf2e-piety", "pietyScore", character.flags["pf2e-piety"]?.pietyScore+1);
   });
+  // End of Piety Score Updates
 
   // Edicts/Anathema Updates
   $("div[data-field] a[data-action='add-piety-edict-anathema']").on("click", async (html) => {
@@ -106,10 +107,15 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
     }
   });
 
-  $("div[data-field='edict'] input").on("keyup", async (html) => {
-    let index = parseInt($(html.target).siblings('a[data-index]')[0].data('index'));
-    await character.flags['pf2e-piety'].edicts.splice(index, 0, html.value); // FIXME: Doesn't save
-    await character.setFlag('pf2e-piety', 'edicts', character.flags['pf2e-piety'].edicts);
-    // get jQuery siblings(a[data-index]) to get index value. Use this to setFlag for the edict[index] as html.value
+  $("div[data-field] input").on("keyup", async (html) => {
+    let value = $(html.target).val();
+    let index = parseInt($(html.target).siblings('a[data-index]').data('index'));
+    if ($(html.target).parents('div[data-field]').data('field') == 'edicts') {
+    await character.flags['pf2e-piety'].edicts.splice(index, 1, value);
+    }
+    else if ($(html.target).parents('div[data-field]').data('field') == 'anathema') {
+      await character.flags['pf2e-piety'].anathema.splice(index, 1, value);
+    }
   });
+  // End of Edict/Anathema Updates.
 });
