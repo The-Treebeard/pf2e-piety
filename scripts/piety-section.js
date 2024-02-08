@@ -95,14 +95,21 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   });
 
   $("div[data-field] a[data-action='delete-piety-edict-anathema']").on("click", async (html) => {
-    let index = parseInt($(event.target).data('index'));
+    let index = parseInt($(html.target).data('index'));
     if ($(html.target).parents('div[data-field]').data('field') == 'edicts') {
-    await character.flags['pf2e-piety'].edicts.splice(index, 1); // FIXME: Doesn't disappear immediately.
+    await character.flags['pf2e-piety'].edicts.splice(index, 1);
     character.setFlag('pf2e-piety', 'edicts', character.flags['pf2e-piety'].edicts);
     }
     else if ($(html.target).parents('div[data-field]').data('field') == 'anathema') {
-      await character.flags['pf2e-piety'].anathema.splice(index, 1); // FIXME: Doesn't disappear immediately.
+      await character.flags['pf2e-piety'].anathema.splice(index, 1);
       character.setFlag('pf2e-piety', 'anathema', character.flags['pf2e-piety'].anathema);
     }
+  });
+
+  $("div[data-field='edict'] input").on("keyup", async (html) => {
+    let index = parseInt($(html.target).siblings('a[data-index]')[0].data('index'));
+    await character.flags['pf2e-piety'].edicts.splice(index, 0, html.value); // FIXME: Doesn't save
+    await character.setFlag('pf2e-piety', 'edicts', character.flags['pf2e-piety'].edicts);
+    // get jQuery siblings(a[data-index]) to get index value. Use this to setFlag for the edict[index] as html.value
   });
 });
