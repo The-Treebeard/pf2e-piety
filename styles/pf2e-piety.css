@@ -63,8 +63,10 @@
     padding-left: 15px;
 }
 
-.edict-anathema {
+div.edict-anathema, ol.edict-anathema li {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
