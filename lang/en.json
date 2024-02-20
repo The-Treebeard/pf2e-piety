@@ -11,6 +11,8 @@
         "Anathema": "Anathema",
         "Obstacles": "Obstacles",
         "Threshold": "Threshold",
+        "Boons": "Boons",
+        "BoonsAndCurses": "Boons and Curses",
         "BoonHint": "Add Piety Boon here.",
         "CurseHint": "Add Piety Curse here."
     }

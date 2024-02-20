@@ -70,3 +70,20 @@ div.edict-anathema, ol.edict-anathema li {
     align-items: center;
     gap: 10px;
 }
+
+.thresholds {
+    padding: 0;
+}
+.thresholds li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.thresholds p {
+    margin-left: 0.5rem;
+}
+
+.thresholds a {
+    margin-left: auto;
+}

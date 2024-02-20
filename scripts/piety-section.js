@@ -60,8 +60,7 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   // Append piety-section.hbs to below Divine Intercession list.
   var pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs', {
     deity: character.deity,
-    piety: score,
-    edicts: edicts,
+    piety: character.flags["pf2e-piety"],
     anathema: anathema,
     threshold1: game.settings.get('pf2e-piety','first-threshold'),
     threshold2: game.settings.get('pf2e-piety','second-threshold'),
@@ -118,4 +117,14 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
     }
   });
   // End of Edict/Anathema Updates.
+
+  // Boon Updates
+  $("ol[class='thresholds'] li").on("dragover", (html) => { // FIXME
+    Pf2ePiety.dropTarget = html.target;
+  });
+
+  Hooks.on("dropActorSheetData", (actor, sheet, data) => { // FIXME
+    // item.system.category == "deityboon";
+    console.log(data.uuid);
+  });
 });

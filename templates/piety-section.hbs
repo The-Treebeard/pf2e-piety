@@ -28,7 +28,7 @@
         <div class="piety-score-modifier">
             <button type="button" data-action="piety-score-decrease">-</button>
             <h3 aria-label="Pf2ePiety.Piety">
-                {{piety}}
+                {{piety.pietyScore}}
             </h3>
             <button type="button" data-action="piety-score-increase">+</button>
         </div>
@@ -40,7 +40,7 @@
     <div class="label-add edict-anathema">
         <label
             class="details-label"
-            {{#if edicts}}
+            {{#if piety.edicts}}
             for="{{document.uuid}}-piety-edicts"{{/if}}
         >{{localize "Pf2ePiety.Edicts"}}</label>
         <a
@@ -49,7 +49,7 @@
         ><i class="fa-solid fa-plus"></i></a>
     </div>
     <ol class="edict-anathema">
-        {{~#each edicts as |line index|~}}
+        {{~#each piety.edicts as |line index|~}}
             <li>
                 <p>{{increment index}}.</p>
                 <input
@@ -97,20 +97,77 @@
             </li>
         {{/each}}
     </ol>
-    {{! Piety Thresholds }}
-    <ol>
-        <li>
-            <p>{{localize "Pf2ePiety.Piety"}} {{threshold1}}</p>
-        </li>
-        <li>
-            <p>{{localize "Pf2ePiety.Piety"}} {{threshold2}}</p>
-        </li>
-        <li>
-            <p>{{localize "Pf2ePiety.Piety"}} {{threshold3}}</p>
-        </li>
-        <li>
-            <p>{{localize "Pf2ePiety.Piety"}} {{threshold4}}</p>
-        </li>
-    </ol>
-    {{! EDIT: Add Feat-Slot partials similar to pf2e's feat-slot.hbs }}
-</div>
+ </div>
+{{! Piety Thresholds }}
+<h2 class="piety-score-heading">{{localize "Pf2ePiety.Boons"}}</h2>
+<ol class="thresholds">
+    <li>
+        {{> boonSlot threshold=threshold1 boon=piety.boon1}}
+    </li>
+    <li>
+        {{> boonSlot threshold=threshold2 boon=piety.boon2}}
+    </li>
+    <li>
+        {{> boonSlot threshold=threshold3 boon=piety.boon3}}
+    </li>
+    <li>
+        {{> boonSlot threshold=threshold4 boon=piety.boon4}}
+    </li>
+</ol>
+
+{{! Piety Boon Slot Partial }}
+{{#*inline "boonSlot"}}
+<label class="details-label">{{localize "Pf2ePiety.Piety"}} {{threshold}}</label>
+{{#if boon}}
+    <p>{{boon.name}}</p>
+    <a
+        data-action={{boon.deleteAction}}
+        data-tooltip="PF2E.Actor.Character.Biography.Edicts.Delete" <!-- FIXME: Change tooltip -->
+    ><i class="fa-solid fa-trash"></i></a>
+{{else}}
+    <p>{{localize "Pf2ePiety.BoonHint"}}</p>
+{{/if}}
+{{/inline}}
+
+{{! EDIT: Add Feat-Slot partials similar to pf2e's feat-slot.hbs }}
+{{#*inline "featSlot"}}
+{{#if featSlot.feat}}
+    <li class="item feat-item" data-item-id="{{featSlot.feat.id}}" data-slot-id="{{featSlot.id}}">
+        <div class="item-name drag-handle">
+            <div class="feat-slot-title">{{featSlot.label}}</div>
+            <a class="item-image framed" data-action="item-to-chat">
+                <img class="item-icon" src="{{featSlot.feat.img}}" alt="{{featSlot.feat.name}}">
+                <i class="fa-solid fa-message"></i>
+            </a>
+            <h4 class="name"><a data-action="toggle-summary">{{featSlot.feat.name}}</a></h4>
+        </div>
+        <div class="item-controls">
+            {{#if @root.editable}}
+                <a data-action="edit-item" data-tooltip="PF2E.EditItemTitle"><i class="fa-solid fa-fw fa-edit"></i></a>
+                <a data-action="delete-item" data-tooltip="PF2E.DeleteItemTitle"><i class="fa-solid fa-fw fa-trash"></i></a>
+            {{/if}}
+        </div>
+        <div class="item-summary" hidden></div>
+    </li>
+{{else}}
+        {{> emptySlot slot=featSlot}}
+{{/if}}
+
+{{#*inline "emptySlot"}}
+    <li class="feat-item" data-slot-id="{{slot.id}}">
+        <div class="item-name">
+            <div class="feat-slot-title">{{slot.label}}</div>
+            <div class="item-placeholder">{{coalesce slot.restriction.hint (localize "PF2E.EmptySlot")}}</div>
+        </div>
+        <div class="item-controls">
+            {{#if @root.editable}}
+                <a
+                    data-action="browse-feats"
+                    data-filter="{{featFilter}},conjunction-or"
+                    data-level="{{slot.level}}"
+                ><i class="fa-solid fa-fw fa-search"></i></a>
+            {{/if}}
+        </div>
+    </li>
+{{/inline}}
+{{/inline}}
