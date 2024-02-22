@@ -101,32 +101,26 @@
 {{! Piety Thresholds }}
 <h2 class="piety-score-heading">{{localize "Pf2ePiety.Boons"}}</h2>
 <ol class="thresholds">
-    <li>
-        {{> boonSlot threshold=threshold1 boon=piety.boon1}}
-    </li>
-    <li>
-        {{> boonSlot threshold=threshold2 boon=piety.boon2}}
-    </li>
-    <li>
-        {{> boonSlot threshold=threshold3 boon=piety.boon3}}
-    </li>
-    <li>
-        {{> boonSlot threshold=threshold4 boon=piety.boon4}}
-    </li>
+    {{> boonSlot field="boon1" threshold=threshold1 boon=piety.boon1}}
+    {{> boonSlot field="boon2" threshold=threshold2 boon=piety.boon2}}
+    {{> boonSlot field="boon3" threshold=threshold3 boon=piety.boon3}}
+    {{> boonSlot field="boon4" threshold=threshold4 boon=piety.boon4}}
 </ol>
 
 {{! Piety Boon Slot Partial }}
 {{#*inline "boonSlot"}}
-<label class="details-label">{{localize "Pf2ePiety.Piety"}} {{threshold}}</label>
-{{#if boon}}
-    <p>{{boon.name}}</p>
-    <a
-        data-action={{boon.deleteAction}}
-        data-tooltip="PF2E.Actor.Character.Biography.Edicts.Delete" <!-- FIXME: Change tooltip -->
-    ><i class="fa-solid fa-trash"></i></a>
-{{else}}
-    <p>{{localize "Pf2ePiety.BoonHint"}}</p>
-{{/if}}
+<li data-field={{field}}>
+    <label class="details-label">{{localize "Pf2ePiety.Piety"}} {{threshold}}</label>
+    {{#if boon}}
+        <p>{{boon.name}}</p>
+        <a
+            data-action={{boon.deleteAction}}
+            data-tooltip="PF2E.Actor.Character.Biography.Edicts.Delete" 
+        ><i class="fa-solid fa-trash"></i></a>
+    {{else}}
+        <p>{{localize "Pf2ePiety.BoonHint"}}</p>
+    {{/if}}
+</li>
 {{/inline}}
 
 {{! EDIT: Add Feat-Slot partials similar to pf2e's feat-slot.hbs }}
