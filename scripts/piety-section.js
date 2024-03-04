@@ -54,6 +54,7 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   var edicts = character.flags["pf2e-piety"]?.edicts ?? [];
   var anathema = character.flags["pf2e-piety"]?.anathema ?? [];
   let score = character.flags["pf2e-piety"]?.pietyScore ?? 1;
+  let boon1 = await fromUuid(character.flags["pf2e-piety"]?.boon1 ?? null);
   character.setFlag('pf2e-piety', 'pietyScore', score);
   character.setFlag('pf2e-piety', 'edicts', edicts);
   character.setFlag('pf2e-piety', 'anathema', anathema);
@@ -61,6 +62,10 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   var pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs', {
     deity: character.deity,
     piety: character.flags["pf2e-piety"],
+    boon1: boon1,
+    boon2: fromUuidSync(character.flags["pf2e-piety"].boon2),
+    boon3: fromUuidSync(character.flags["pf2e-piety"].boon3),
+    boon4: fromUuidSync(character.flags["pf2e-piety"].boon4),
     anathema: anathema,
     threshold1: game.settings.get('pf2e-piety','first-threshold'),
     threshold2: game.settings.get('pf2e-piety','second-threshold'),
@@ -116,10 +121,9 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
       await character.flags['pf2e-piety'].anathema.splice(index, 1, value);
     }
   });
-  // End of Edict/Anathema Updates.
 
   // Boon Updates
-  $("ol[class='thresholds'] li").on("dragenter", (html) => {
+  $("ol[class='thresholds'] > li").on("dragenter", (html) => {
     Pf2ePiety.dropTarget = $(html.target).data('field');
     console.log("Dragged into: " + Pf2ePiety.dropTarget); // FIXME: Will say 'undefined' in the middle of the list item.
   });
@@ -128,77 +132,86 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
     Pf2ePiety.dropTarget = null;
     console.log("Focus gone.")
   });
+});
 
-  Hooks.on("preCreateItem", async (document, sourceData, userId) => {
+Hooks.on("preCreateItem", async (document, sourceData, userId) => {
     if (Pf2ePiety.dropTarget != null) {
+      let score = document.parent.flags['pf2e-piety'].pietyScore;
+      let threshold = null;
+      switch (Pf2ePiety.dropTarget) {
+        case("boon1"):
+          threshold = game.settings.get('pf2e-piety','first-threshold');
+          break;
+        case("boon2"):
+          threshold = game.settings.get('pf2e-piety','second-threshold');
+          break;
+        case("boon3"):
+          threshold = game.settings.get('pf2e-piety','third-threshold');
+          break;
+        case("boon4"):
+          threshold = game.settings.get('pf2e-piety','fourth-threshold');
+          break;
+        default:
+          threshold = null;
+      }
       console.log("Valid boon target: " + Pf2ePiety.dropTarget);
       if (document.system.category == "deityboon") {
         console.log("Valid boon selected");
+        // Do Somthing
+        if (score < threshold) {
+          console.log(userId);
+          // TODO: Unrender and false-predicate boon.
+        }
       } else {
-        ui.notifications.warn('Invalid option for boon. Please select a feat/feature with the "Deity Boon" category.'); //FIXEM: Warning fires multiple times.
+        ui.notifications.warn('Pf2e-Piety: You must choose a <i>Deity Boon</i> to add to your threshold.');
+        return false;
       }
     }
-    else {
-      console.log("Invalid boon target: " + Pf2ePiety.dropTarget);
-    }
-    // const sourceItem = fromUuid(data.uuid);
-    // const sourceBoon = sourceItem.then((result) => {
-    //   console.log(Pf2ePiety.dropTarget);
-    //   if (document.parent == result) {
-    //     console.log("Parent found!");
-    //   } else {
-    //     console.log("Parent not found.");
-    //   }
-    // });
-  });
-
-  Hooks.on("dropActorSheetData", async (actor, sheet, data) => { // FIXME
-    // item.system.category == "deityboon";
-    // if (data.type == "Item") {
-    //   let item = game.items.get(data.uuid);
-    //   if (item.system.category == "deityboon") {
-    //     await character.setFlag("pf2e-piety", $(html.target).data("field"), item);
-    //   }
-    // }
-    // Function to handle fromUuid Promise.
-    // async function getBoon() { //FIXME: Need to find ACTUAL document.
-    //   try {
-    //     const document = await fromUuid(data.uuid);
-    //     return document;
-    //     // actor.setFlag('pf2e-piety', 'boon1', boon[0]);
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // }
-    
-    /*
-    Treebeard
-      Sorry, by "item", I mean a feat (specifically a Deity Boon).
-      I don't want it to appear in the Divine Intercessions section, and I don't want any effects from it to be active.
-    Tikael — Today at 2:29 PM
-      Then no.
-      If you don't want the item to appear on the actor then the item has to not be put on the actor.
-      There's unidentified effects, which hide from players, but that's the only thing like that.
-    Treebeard — Today at 2:31 PM
-      I do want to appear on the character sheet (just in a different location), but I don't want it's effects to be active. It sounds like this isn't possible, though.
-    Tikael — Today at 2:32 PM
-      You won't be able to change the location without changing the item type
-      If you wanted it to show up as a bonus feat or something that's easy enough since boons and feats are the same base item type.
-      But you couldn't have it be a consumable then turn into the boon, that would require two different items since the data structure of the two item types is different
-    Treebeard — Today at 2:33 PM
-      Is it possible to have it simply be inactive then and keep the location?
-    Tikael — Today at 2:34 PM
-      Yes, you can predicate the bonuses
-      What do you want to activate it?
-    Treebeard — Today at 2:34 PM
-      It will be dependent on a module flag value.
-      That might just be a function I add in my module though to check.
-    Tikael — Today at 2:36 PM
-      You can have the module sniff out the boon and flip the predicate to something that's always true
-      Flip between [{"not": "self:creature"}] and ["self:creature"]
-
-    Also, change the rendering for the feat.
-    Retrieve the item, access it's rules elements attribute, then for each rule, append a "not" predicate to the
-    */
-  });
 });
+
+Hooks.on("createItem", async (document, options, userID) => {
+  // TODO: Edit boon to be false-predicated. (item.system.rules > for each rule.predicate (push {"not": "self:creature"})
+  // TODO: Unrender boon. Not userId.render = false  or  document.visible = false;
+  console.log(document);
+  let actor = document.parent;
+
+  if (Pf2ePiety.dropTarget != null) {
+    if (document.system.category == "deityboon") {
+      await actor.setFlag('pf2e-piety', Pf2ePiety.dropTarget, document.uuid);
+      // FIXME: Delete previous item in flag.
+    }
+  }
+  else {
+    console.log("Invalid boon target: " + Pf2ePiety.dropTarget);
+  }
+})
+
+ /*
+  Treebeard
+    Sorry, by "item", I mean a feat (specifically a Deity Boon).
+    I don't want it to appear in the Divine Intercessions section, and I don't want any effects from it to be active.
+  Tikael — Today at 2:29 PM
+    Then no.
+    If you don't want the item to appear on the actor then the item has to not be put on the actor.
+    There's unidentified effects, which hide from players, but that's the only thing like that.
+  Treebeard — Today at 2:31 PM
+    I do want to appear on the character sheet (just in a different location), but I don't want it's effects to be active. It sounds like this isn't possible, though.
+  Tikael — Today at 2:32 PM
+    You won't be able to change the location without changing the item type
+    If you wanted it to show up as a bonus feat or something that's easy enough since boons and feats are the same base item type.
+    But you couldn't have it be a consumable then turn into the boon, that would require two different items since the data structure of the two item types is different
+  Treebeard — Today at 2:33 PM
+    Is it possible to have it simply be inactive then and keep the location?
+  Tikael — Today at 2:34 PM
+    Yes, you can predicate the bonuses
+    What do you want to activate it?
+  Treebeard — Today at 2:34 PM
+    It will be dependent on a module flag value.
+    That might just be a function I add in my module though to check.
+  Tikael — Today at 2:36 PM
+    You can have the module sniff out the boon and flip the predicate to something that's always true
+    Flip between [{"not": "self:creature"}] and ["self:creature"]
+
+  Also, change the rendering for the feat.
+  Retrieve the item, access it's rules elements attribute, then for each rule, append a "not" predicate to the
+  */

@@ -14,6 +14,7 @@
         "Boons": "Boons",
         "BoonsAndCurses": "Boons and Curses",
         "BoonHint": "Add Piety Boon here.",
-        "CurseHint": "Add Piety Curse here."
+        "CurseHint": "Add Piety Curse here.",
+        "BoonDelete": "Remove this boon."
     }
 }

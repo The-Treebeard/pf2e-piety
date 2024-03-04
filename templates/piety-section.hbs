@@ -101,10 +101,10 @@
 {{! Piety Thresholds }}
 <h2 class="piety-score-heading">{{localize "Pf2ePiety.Boons"}}</h2>
 <ol class="thresholds">
-    {{> boonSlot field="boon1" threshold=threshold1 boon=piety.boon1}}
-    {{> boonSlot field="boon2" threshold=threshold2 boon=piety.boon2}}
-    {{> boonSlot field="boon3" threshold=threshold3 boon=piety.boon3}}
-    {{> boonSlot field="boon4" threshold=threshold4 boon=piety.boon4}}
+    {{> boonSlot field="boon1" threshold=threshold1 boon=boon1}}
+    {{> boonSlot field="boon2" threshold=threshold2 boon=boon2}}
+    {{> boonSlot field="boon3" threshold=threshold3 boon=boon3}}
+    {{> boonSlot field="boon4" threshold=threshold4 boon=boon4}}
 </ol>
 
 {{! Piety Boon Slot Partial }}
@@ -115,7 +115,7 @@
         <p>{{boon.name}}</p>
         <a
             data-action={{boon.deleteAction}}
-            data-tooltip="PF2E.Actor.Character.Biography.Edicts.Delete" 
+            data-tooltip="Pf2ePiety.BoonDelete"
         ><i class="fa-solid fa-trash"></i></a>
     {{else}}
         <p>{{localize "Pf2ePiety.BoonHint"}}</p>
