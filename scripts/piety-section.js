@@ -24,9 +24,29 @@ export class Pf2ePiety {
     Pf2ePiety.SOCKET = "module.pf2e-piety";
   }
 
+  /**
+   * Increases Piety Score for actor by a set amount.
+   * @param {Actor} actor 
+   * @param {Number} amount 
+   */
   static incrementPiety(actor, amount) {
     actor.setFlag("pf2e-piety", pietyScore, pietyScore + amount);
+    // TODO: Check threshold and hide and false-predicate boons.
+    // Set booleans. If the boolean needs to be changed, change the rendering then change the boon.
   }
+
+  /**
+   * Checks if boon is already attached to flag, then deletes it.
+   * @param {ActorDocument} parent 
+   * @param {string} flagName 
+   */
+  static async checkBoon(parent, flagName) {
+    let uuid = parent.getFlag('pf2e-piety', flagName);
+    if (fromUuid(uuid) != null) { // FIXME: Promise needs to resolve or this will trugger every time.
+      const deleted = await Item.deleteDocuments([fromUuid(uuid).id], {parent: parent}); // FIXME: Promise needs to resolve first.
+    }
+  }
+
   /*static async onMessage(data) {
     switch (data.action) {
         case 'sendMessage': {
@@ -42,9 +62,7 @@ export class Pf2ePiety {
 }
 console.log("Starting Hooks.");
 Hooks.once('init', Pf2ePiety.init);
-// Hooks.once('ready', Pf2ePiety.ready);
 
-// ADD: "dropover" event with dropTarget. See MonksAftermath.
 Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   Handlebars.registerHelper('increment', (aString) => {
     return parseInt(aString)+1;
@@ -90,7 +108,7 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   // Edicts/Anathema Updates
   $("div[data-field] a[data-action='add-piety-edict-anathema']").on("click", async (html) => {
     if ($(html.target).parents('div[data-field]').data('field') == 'edicts') {
-    await character.flags['pf2e-piety'].edicts.push(""); // FIXME: Pushes, but can't be edited.
+    await character.flags['pf2e-piety'].edicts.push("");
     character.setFlag('pf2e-piety', 'edicts', character.flags['pf2e-piety'].edicts); // FIXME: There has to be a better way to do this.
     }
     else if ($(html.target).parents('div[data-field]').data('field') == 'anathema') {
@@ -124,13 +142,15 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
 
   // Boon Updates
   $("ol[class='thresholds'] > li").on("dragenter", (html) => {
-    Pf2ePiety.dropTarget = $(html.target).data('field');
-    console.log("Dragged into: " + Pf2ePiety.dropTarget); // FIXME: Will say 'undefined' in the middle of the list item.
+    if ($(html.target).parents('li[data-field]').length > 0) {
+      Pf2ePiety.dropTarget = $(html.target).parents('li[data-field]')[0].dataset.field;
+    } else {
+      Pf2ePiety.dropTarget = $(html.target).data('field');
+    }
   });
 
   $("ol[class='thresholds'] li").on("mouseleave", (html) => {
     Pf2ePiety.dropTarget = null;
-    console.log("Focus gone.")
   });
 });
 
@@ -159,7 +179,6 @@ Hooks.on("preCreateItem", async (document, sourceData, userId) => {
         console.log("Valid boon selected");
         // Do Somthing
         if (score < threshold) {
-          console.log(userId);
           // TODO: Unrender and false-predicate boon.
         }
       } else {
@@ -172,11 +191,11 @@ Hooks.on("preCreateItem", async (document, sourceData, userId) => {
 Hooks.on("createItem", async (document, options, userID) => {
   // TODO: Edit boon to be false-predicated. (item.system.rules > for each rule.predicate (push {"not": "self:creature"})
   // TODO: Unrender boon. Not userId.render = false  or  document.visible = false;
-  console.log(document);
   let actor = document.parent;
 
   if (Pf2ePiety.dropTarget != null) {
     if (document.system.category == "deityboon") {
+      Pf2ePiety.checkBoon(document.parent, Pf2ePiety.dropTarget);
       await actor.setFlag('pf2e-piety', Pf2ePiety.dropTarget, document.uuid);
       // FIXME: Delete previous item in flag.
     }
