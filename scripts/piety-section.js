@@ -41,24 +41,11 @@ export class Pf2ePiety {
    * @param {string} flagName 
    */
   static async checkBoon(parent, flagName) {
-    let uuid = parent.getFlag('pf2e-piety', flagName);
-    if (fromUuid(uuid) != null) { // FIXME: Promise needs to resolve or this will trugger every time.
-      const deleted = await Item.deleteDocuments([fromUuid(uuid).id], {parent: parent}); // FIXME: Promise needs to resolve first.
+    let boon = fromUuidSync(parent.getFlag('pf2e-piety', flagName));
+    if (boon != null) {
+      const deleted = await Item.deleteDocuments([boon.id], {parent: parent});
     }
   }
-
-  /*static async onMessage(data) {
-    switch (data.action) {
-        case 'sendMessage': {
-            if (setting("notification-on-advance"))
-                ui.notifications.info(data.message);
-        }
-    }
-  }*/
-
-  /*static ready() {
-    game.socket.on(Pf2ePiety.SOCKET, Pf2ePiety.onMessage);
-  }*/
 }
 console.log("Starting Hooks.");
 Hooks.once('init', Pf2ePiety.init);
@@ -190,14 +177,13 @@ Hooks.on("preCreateItem", async (document, sourceData, userId) => {
 
 Hooks.on("createItem", async (document, options, userID) => {
   // TODO: Edit boon to be false-predicated. (item.system.rules > for each rule.predicate (push {"not": "self:creature"})
-  // TODO: Unrender boon. Not userId.render = false  or  document.visible = false;
+  // TODO: Unrender boon. Not userId.render = false  or  document.visible = false; Or Unidentify Item.
   let actor = document.parent;
 
   if (Pf2ePiety.dropTarget != null) {
     if (document.system.category == "deityboon") {
       Pf2ePiety.checkBoon(document.parent, Pf2ePiety.dropTarget);
       await actor.setFlag('pf2e-piety', Pf2ePiety.dropTarget, document.uuid);
-      // FIXME: Delete previous item in flag.
     }
   }
   else {
