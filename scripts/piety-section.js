@@ -33,6 +33,8 @@ export class Pf2ePiety {
     actor.setFlag("pf2e-piety", pietyScore, pietyScore + amount);
     // TODO: Check threshold and hide and false-predicate boons.
     // Set booleans. If the boolean needs to be changed, change the rendering then change the boon.
+    // activate: set unidentified to false, and  if ruleElement.predicate.includes("not: self:creature"), pop() the array.
+    // unactivate: set unidentified to true, and push("not: self:creature")
   }
 
   /**
@@ -42,11 +44,11 @@ export class Pf2ePiety {
    */
   static async checkBoon(parent, flagName) {
     let boon = fromUuidSync(parent.getFlag('pf2e-piety', flagName));
-    if (boon != null) {
-      const deleted = await Item.deleteDocuments([boon.id], {parent: parent});
+      if (boon != null) {
+        const deleted = await Item.deleteDocuments([boon.id], {parent: parent});
+      }
     }
   }
-}
 console.log("Starting Hooks.");
 Hooks.once('init', Pf2ePiety.init);
 
@@ -56,10 +58,13 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   })
 
   const character = charactersheet.actor;
+  let score = character.flags["pf2e-piety"]?.pietyScore ?? 1;
   var edicts = character.flags["pf2e-piety"]?.edicts ?? [];
   var anathema = character.flags["pf2e-piety"]?.anathema ?? [];
-  let score = character.flags["pf2e-piety"]?.pietyScore ?? 1;
   let boon1 = await fromUuid(character.flags["pf2e-piety"]?.boon1 ?? null);
+  let boon2 = await fromUuid(character.flags["pf2e-piety"]?.boon2 ?? null);
+  let boon3 = await fromUuid(character.flags["pf2e-piety"]?.boon3 ?? null);
+  let boon4 = await fromUuid(character.flags["pf2e-piety"]?.boon4 ?? null);
   character.setFlag('pf2e-piety', 'pietyScore', score);
   character.setFlag('pf2e-piety', 'edicts', edicts);
   character.setFlag('pf2e-piety', 'anathema', anathema);
@@ -68,9 +73,9 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
     deity: character.deity,
     piety: character.flags["pf2e-piety"],
     boon1: boon1,
-    boon2: fromUuidSync(character.flags["pf2e-piety"].boon2),
-    boon3: fromUuidSync(character.flags["pf2e-piety"].boon3),
-    boon4: fromUuidSync(character.flags["pf2e-piety"].boon4),
+    boon2: boon2,
+    boon3: boon3,
+    boon4: boon4,
     anathema: anathema,
     threshold1: game.settings.get('pf2e-piety','first-threshold'),
     threshold2: game.settings.get('pf2e-piety','second-threshold'),
@@ -162,14 +167,15 @@ Hooks.on("preCreateItem", async (document, sourceData, userId) => {
           threshold = null;
       }
       console.log("Valid boon target: " + Pf2ePiety.dropTarget);
-      if (document.system.category == "deityboon") {
+      if (document.type == "effect") { // FIXME: Change to Effect.
         console.log("Valid boon selected");
         // Do Somthing
         if (score < threshold) {
-          // TODO: Unrender and false-predicate boon.
+          // TODO: Unidentify and false-predicate boon.
+          document.updateSource({"system.unidentified": true});
         }
       } else {
-        ui.notifications.warn('Pf2e-Piety: You must choose a <i>Deity Boon</i> to add to your threshold.');
+        ui.notifications.warn('Pf2e-Piety: You must choose an <i>Effect</i> to add to your threshold.');
         return false;
       }
     }
@@ -181,13 +187,10 @@ Hooks.on("createItem", async (document, options, userID) => {
   let actor = document.parent;
 
   if (Pf2ePiety.dropTarget != null) {
-    if (document.system.category == "deityboon") {
+    if (document.type == "effect") {
       Pf2ePiety.checkBoon(document.parent, Pf2ePiety.dropTarget);
       await actor.setFlag('pf2e-piety', Pf2ePiety.dropTarget, document.uuid);
     }
-  }
-  else {
-    console.log("Invalid boon target: " + Pf2ePiety.dropTarget);
   }
 })
 
