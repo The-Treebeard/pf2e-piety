@@ -92,10 +92,26 @@ export class Pf2ePiety {
     if (boon != null && activate) {
       boon.update({"system.unidentified": false});
       console.log(boon);
-      // remove always-false predicates
+      let activeRules = [];
+      for (const rulesElement of boon.rules) { // FIXME: Need to update boon as a whole array of ALL predicates.
+        if (rulesElement.predicate.includes({"not": "self:creature"}, rulesElement.predicate.length - 1)) {
+          var poppedElement = rulesElement;
+          poppedElement.predicate.pop();
+        }
+        activeRules.push(poppedElement);
+      }
+      boon.update({"rules.predicate": activeRules});
     } else if (boon != null) {
       boon.update({"system.unidentified": true});
-      // add always false predicates
+      let deActiveRules = []
+      for (const rulesElement of boon.rules) { // FIXME: Need to update boon as a whole array of ALL predicates.
+        if (!rulesElement.predicate.includes({"not": "self:creature"}, rulesElement.predicate.length - 1)) {
+          var pushedElement = rulesElement;
+          pushedElement.predicate.push({"not": "self:creature"}); // FIXME: Predicates still nto getting pushed.
+        }
+        deActiveRules.push(pushedElement);
+      }
+      boon.update({"rules.predicate": deActiveRules});
     }
    
   }
