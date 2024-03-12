@@ -26,8 +26,8 @@ export class Pf2ePiety {
 
   /**
    * Increases Piety Score for actor by a set amount.
-   * @param {Actor} actor 
-   * @param {Number} amount 
+   * @param {CharacterPF2E} actor The Actor to be modified.
+   * @param {Number} amount The amount by which pietyScore should be incremented.
    */
   static incrementPiety(actor, amount) {
     let oldScore = actor.getFlag("pf2e-piety", "pietyScore");
@@ -35,36 +35,44 @@ export class Pf2ePiety {
     let newScore = actor.getFlag("pf2e-piety", "pietyScore");
     if (newScore >= game.settings.get('pf2e-piety', 'fourth-threshold')) {
       if (oldScore < game.settings.get('pf2e-piety', 'fourth-threshold')) {
-        console.log("Activate Boon 4."); //&& fromUuid(actor.flags['pf2e-piety'].boon4) != null
+        console.log("Activate Boon 4.");
+        Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon4'));
       }
     }
     else if (newScore >= game.settings.get('pf2e-piety', 'third-threshold')) {
       if (oldScore >= game.settings.get('pf2e-piety', 'fourth-threshold')) {
         console.log("Deactivate Boon 4.");
+        Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon4'), false);
       }
       else if (oldScore < game.settings.get('pf2e-piety', 'third-threshold')) {
         console.log("Activate Boon 3.");
+        Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon3'));
       }
     }
     else if (newScore >= game.settings.get('pf2e-piety', 'second-threshold')) {
       if (oldScore >= game.settings.get('pf2e-piety', 'third-threshold')) {
         console.log("Deactivate Boon 3.");
+        Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon3'), false);
       }
       else if (oldScore < game.settings.get('pf2e-piety', 'second-threshold')) {
         console.log("Activate Boon 2.");
+        Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon2'));
       }
     }
     else if (newScore >= game.settings.get('pf2e-piety', 'first-threshold')) {
       if (oldScore >= game.settings.get('pf2e-piety', 'second-threshold')) {
         console.log("Deactivate Boon 2.");
+        Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon2'), false);
       }
       else if (oldScore < game.settings.get('pf2e-piety', 'first-threshold')) {
         console.log("Activate Boon 1.");
+        Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon1'));
       }
     }
     else {
       if (oldScore >= game.settings.get('pf2e-piety', 'first-threshold')) {
         console.log("Deactivate Boon 1.");
+        Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon1'), false);
       }
     }
     actor.setFlag('pf2e-piety', 'pietyScore', oldScore + amount);
@@ -75,9 +83,27 @@ export class Pf2ePiety {
   }
 
   /**
+   * Unidentifies boon and removes always-false rules predicates. The opposite is done if activate is set to false.
+   * @param {String} uuid The item uuid.
+   * @param {boolean} activate A boolean to determine if boon should be activated or deactivated.
+   */
+  static async activateBoon(uuid, activate = true) {
+    let boon = await fromUuid(uuid);
+    if (boon != null && activate) {
+      boon.update({"system.unidentified": false});
+      console.log(boon);
+      // remove always-false predicates
+    } else if (boon != null) {
+      boon.update({"system.unidentified": true});
+      // add always false predicates
+    }
+   
+  }
+
+  /**
    * Checks if boon is already attached to flag, then deletes it.
-   * @param {ActorDocument} parent 
-   * @param {string} flagName 
+   * @param {CharacterPF2E} parent The parent Actor the EmbeddedDocument is attached to.
+   * @param {string} flagName The name of the flag the EmbeddedDocument corresponds with.
    */
   static async checkBoon(parent, flagName) {
     let boon = fromUuidSync(parent.getFlag('pf2e-piety', flagName));
