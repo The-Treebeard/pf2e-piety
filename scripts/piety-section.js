@@ -30,7 +30,44 @@ export class Pf2ePiety {
    * @param {Number} amount 
    */
   static incrementPiety(actor, amount) {
-    actor.setFlag("pf2e-piety", pietyScore, pietyScore + amount);
+    let oldScore = actor.getFlag("pf2e-piety", "pietyScore");
+    actor.flags["pf2e-piety"].pietyScore = oldScore + amount;
+    let newScore = actor.getFlag("pf2e-piety", "pietyScore");
+    if (newScore >= game.settings.get('pf2e-piety', 'fourth-threshold')) {
+      if (oldScore < game.settings.get('pf2e-piety', 'fourth-threshold')) {
+        console.log("Activate Boon 4."); //&& fromUuid(actor.flags['pf2e-piety'].boon4) != null
+      }
+    }
+    else if (newScore >= game.settings.get('pf2e-piety', 'third-threshold')) {
+      if (oldScore >= game.settings.get('pf2e-piety', 'fourth-threshold')) {
+        console.log("Deactivate Boon 4.");
+      }
+      else if (oldScore < game.settings.get('pf2e-piety', 'third-threshold')) {
+        console.log("Activate Boon 3.");
+      }
+    }
+    else if (newScore >= game.settings.get('pf2e-piety', 'second-threshold')) {
+      if (oldScore >= game.settings.get('pf2e-piety', 'third-threshold')) {
+        console.log("Deactivate Boon 3.");
+      }
+      else if (oldScore < game.settings.get('pf2e-piety', 'second-threshold')) {
+        console.log("Activate Boon 2.");
+      }
+    }
+    else if (newScore >= game.settings.get('pf2e-piety', 'first-threshold')) {
+      if (oldScore >= game.settings.get('pf2e-piety', 'second-threshold')) {
+        console.log("Deactivate Boon 2.");
+      }
+      else if (oldScore < game.settings.get('pf2e-piety', 'first-threshold')) {
+        console.log("Activate Boon 1.");
+      }
+    }
+    else {
+      if (oldScore >= game.settings.get('pf2e-piety', 'first-threshold')) {
+        console.log("Deactivate Boon 1.");
+      }
+    }
+    actor.setFlag('pf2e-piety', 'pietyScore', oldScore + amount);
     // TODO: Check threshold and hide and false-predicate boons.
     // Set booleans. If the boolean needs to be changed, change the rendering then change the boon.
     // activate: set unidentified to false, and  if ruleElement.predicate.includes("not: self:creature"), pop() the array.
@@ -88,12 +125,12 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   // Piety Score Updates
   $("div.piety-score-modifier button[data-action='piety-score-decrease']").on("click", async (event) => {
     if (character.getFlag('pf2e-piety', 'pietyScore') > 1) {
-      await character.setFlag("pf2e-piety", "pietyScore", character.flags["pf2e-piety"]?.pietyScore-1);
+      Pf2ePiety.incrementPiety(character, -1);
     }
   });
 
   $("div.piety-score-modifier button[data-action='piety-score-increase']").on("click", async (event) => {
-    await character.setFlag("pf2e-piety", "pietyScore", character.flags["pf2e-piety"]?.pietyScore+1);
+    Pf2ePiety.incrementPiety(character, 1);
   });
   // End of Piety Score Updates
 
