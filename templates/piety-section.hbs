@@ -113,10 +113,16 @@
     <label class="details-label">{{localize "Pf2ePiety.Piety"}} {{threshold}}</label>
     {{#if boon}}
         <p>{{boon.name}}</p>
-        <a
-            data-action={{boon.deleteAction}}
-            data-tooltip="Pf2ePiety.BoonDelete"
-        ><i class="fa-solid fa-trash"></i></a>
+        <span>
+            <a
+            data-action="boon-edit"
+            data-tooltip="Pf2ePiety.BoonEdit"
+            ><i class="fa-solid fa-edit"></i></a>
+            <a
+                data-action="boon-delete"
+                data-tooltip="Pf2ePiety.BoonDelete"
+            ><i class="fa-solid fa-trash"></i></a>
+        </span>
     {{else}}
         <p>{{localize "Pf2ePiety.BoonHint"}}</p>
     {{/if}}
