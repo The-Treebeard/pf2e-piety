@@ -76,10 +76,6 @@ export class Pf2ePiety {
       }
     }
     actor.setFlag('pf2e-piety', 'pietyScore', oldScore + amount);
-    // TODO: Check threshold and hide and false-predicate boons.
-    // Set booleans. If the boolean needs to be changed, change the rendering then change the boon.
-    // activate: set unidentified to false, and  if ruleElement.predicate.includes("not: self:creature"), pop() the array.
-    // unactivate: set unidentified to true, and push("not: self:creature")
   }
 
   /**
@@ -91,27 +87,24 @@ export class Pf2ePiety {
     let boon = await fromUuid(uuid);
     if (boon != null && activate) {
       boon.update({"system.unidentified": false});
-      console.log(boon);
       let activeRules = [];
-      for (const rulesElement of boon.rules) { // FIXME: Need to update boon as a whole array of ALL predicates.
-        if (rulesElement.predicate.includes({"not": "self:creature"}, rulesElement.predicate.length - 1)) {
-          var poppedElement = rulesElement;
-          poppedElement.predicate.pop();
+      for (const rulesElement of boon.system.rules) {
+        if(rulesElement.predicate.map(e => e?.not).filter(e => e).includes("self:creature")) {
+          rulesElement.predicate.pop();
         }
-        activeRules.push(poppedElement);
+        activeRules.push(rulesElement);
       }
-      boon.update({"rules.predicate": activeRules});
+      boon.update({"system.rules": activeRules});
     } else if (boon != null) {
       boon.update({"system.unidentified": true});
-      let deActiveRules = []
-      for (const rulesElement of boon.rules) { // FIXME: Need to update boon as a whole array of ALL predicates.
-        if (!rulesElement.predicate.includes({"not": "self:creature"}, rulesElement.predicate.length - 1)) {
-          var pushedElement = rulesElement;
-          pushedElement.predicate.push({"not": "self:creature"}); // FIXME: Predicates still nto getting pushed.
+      let deActiveRules = [];
+      for (const rulesElement of boon.system.rules) { 
+        if (!rulesElement.predicate.map(e => e?.not).filter(e => e).includes("self:creature")) {
+          rulesElement.predicate.push({"not":"self:creature"});
         }
-        deActiveRules.push(pushedElement);
+        deActiveRules.push(rulesElement);
       }
-      boon.update({"rules.predicate": deActiveRules});
+      boon.update({"system.rules": deActiveRules});
     }
    
   }
@@ -128,7 +121,7 @@ export class Pf2ePiety {
       }
     }
   }
-console.log("Starting Hooks.");
+
 Hooks.once('init', Pf2ePiety.init);
 
 Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
@@ -147,7 +140,7 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   character.setFlag('pf2e-piety', 'pietyScore', score);
   character.setFlag('pf2e-piety', 'edicts', edicts);
   character.setFlag('pf2e-piety', 'anathema', anathema);
-  // Append piety-section.hbs to below Divine Intercession list.
+
   var pietyTemplate = await renderTemplate('modules/pf2e-piety/templates/piety-section.hbs', {
     deity: character.deity,
     piety: character.flags["pf2e-piety"],
