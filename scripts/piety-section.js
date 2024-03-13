@@ -220,6 +220,19 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
 
 Hooks.on("preCreateItem", async (document, sourceData, userId) => {
     if (Pf2ePiety.dropTarget != null) {
+      if (document.type == "effect") {
+      } else {
+        ui.notifications.warn('Pf2e-Piety: You must choose an <i>Effect</i> to add to your threshold.');
+        return false; // FIXME: Document is still being created. Its possibly coming from a different preCreateItem from the system.
+      }
+    }
+});
+
+/* Checks for Pf2ePiety.dropTarget then adds boon to flags and possibly "deactivates" it. */
+Hooks.on("createItem", async (document, options, userID) => {
+  let actor = document.parent;
+  if (Pf2ePiety.dropTarget != null) {
+    if (document.type == "effect") {
       let score = document.parent.flags['pf2e-piety'].pietyScore;
       let threshold = null;
       switch (Pf2ePiety.dropTarget) {
@@ -238,60 +251,13 @@ Hooks.on("preCreateItem", async (document, sourceData, userId) => {
         default:
           threshold = null;
       }
-      console.log("Valid boon target: " + Pf2ePiety.dropTarget);
-      if (document.type == "effect") { // FIXME: Change to Effect.
-        console.log("Valid boon selected");
-        // Do Somthing
+      if (document.type == "effect") {
+        Pf2ePiety.checkBoon(document.parent, Pf2ePiety.dropTarget);
+        await actor.setFlag('pf2e-piety', Pf2ePiety.dropTarget, document.uuid);
         if (score < threshold) {
-          // TODO: Unidentify and false-predicate boon.
-          document.updateSource({"system.unidentified": true});
+          Pf2ePiety.activateBoon(document.uuid, false);
         }
-      } else {
-        ui.notifications.warn('Pf2e-Piety: You must choose an <i>Effect</i> to add to your threshold.');
-        return false;
       }
-    }
-});
-
-Hooks.on("createItem", async (document, options, userID) => {
-  // TODO: Edit boon to be false-predicated. (item.system.rules > for each rule.predicate (push {"not": "self:creature"})
-  // TODO: Unrender boon. Not userId.render = false  or  document.visible = false; Or Unidentify Item.
-  let actor = document.parent;
-
-  if (Pf2ePiety.dropTarget != null) {
-    if (document.type == "effect") {
-      Pf2ePiety.checkBoon(document.parent, Pf2ePiety.dropTarget);
-      await actor.setFlag('pf2e-piety', Pf2ePiety.dropTarget, document.uuid);
     }
   }
 })
-
- /*
-  Treebeard
-    Sorry, by "item", I mean a feat (specifically a Deity Boon).
-    I don't want it to appear in the Divine Intercessions section, and I don't want any effects from it to be active.
-  Tikael — Today at 2:29 PM
-    Then no.
-    If you don't want the item to appear on the actor then the item has to not be put on the actor.
-    There's unidentified effects, which hide from players, but that's the only thing like that.
-  Treebeard — Today at 2:31 PM
-    I do want to appear on the character sheet (just in a different location), but I don't want it's effects to be active. It sounds like this isn't possible, though.
-  Tikael — Today at 2:32 PM
-    You won't be able to change the location without changing the item type
-    If you wanted it to show up as a bonus feat or something that's easy enough since boons and feats are the same base item type.
-    But you couldn't have it be a consumable then turn into the boon, that would require two different items since the data structure of the two item types is different
-  Treebeard — Today at 2:33 PM
-    Is it possible to have it simply be inactive then and keep the location?
-  Tikael — Today at 2:34 PM
-    Yes, you can predicate the bonuses
-    What do you want to activate it?
-  Treebeard — Today at 2:34 PM
-    It will be dependent on a module flag value.
-    That might just be a function I add in my module though to check.
-  Tikael — Today at 2:36 PM
-    You can have the module sniff out the boon and flip the predicate to something that's always true
-    Flip between [{"not": "self:creature"}] and ["self:creature"]
-
-  Also, change the rendering for the feat.
-  Retrieve the item, access it's rules elements attribute, then for each rule, append a "not" predicate to the
-  */
