@@ -35,44 +35,38 @@ export class Pf2ePiety {
     let newScore = actor.getFlag("pf2e-piety", "pietyScore");
     if (newScore >= game.settings.get('pf2e-piety', 'fourth-threshold')) {
       if (oldScore < game.settings.get('pf2e-piety', 'fourth-threshold')) {
-        console.log("Activate Boon 4.");
         Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon4'));
       }
     }
     else if (newScore >= game.settings.get('pf2e-piety', 'third-threshold')) {
       if (oldScore >= game.settings.get('pf2e-piety', 'fourth-threshold')) {
-        console.log("Deactivate Boon 4.");
         Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon4'), false);
       }
       else if (oldScore < game.settings.get('pf2e-piety', 'third-threshold')) {
-        console.log("Activate Boon 3.");
         Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon3'));
       }
     }
     else if (newScore >= game.settings.get('pf2e-piety', 'second-threshold')) {
       if (oldScore >= game.settings.get('pf2e-piety', 'third-threshold')) {
-        console.log("Deactivate Boon 3.");
         Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon3'), false);
       }
       else if (oldScore < game.settings.get('pf2e-piety', 'second-threshold')) {
-        console.log("Activate Boon 2.");
         Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon2'));
       }
     }
     else if (newScore >= game.settings.get('pf2e-piety', 'first-threshold')) {
       if (oldScore >= game.settings.get('pf2e-piety', 'second-threshold')) {
-        console.log("Deactivate Boon 2.");
         Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon2'), false);
       }
       else if (oldScore < game.settings.get('pf2e-piety', 'first-threshold')) {
-        console.log("Activate Boon 1.");
         Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon1'));
+        // $("li[data-field='boon1']").addClass("active-threshold");
       }
     }
     else {
       if (oldScore >= game.settings.get('pf2e-piety', 'first-threshold')) {
-        console.log("Deactivate Boon 1.");
         Pf2ePiety.activateBoon(actor.getFlag('pf2e-piety', 'boon1'), false);
+        // $("li[data-field='boon1']").removeClass("active-threshold");
       }
     }
     actor.setFlag('pf2e-piety', 'pietyScore', oldScore + amount);
@@ -215,6 +209,34 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
 
   $("ol[class='thresholds'] li").on("mouseleave", (html) => {
     Pf2ePiety.dropTarget = null;
+  });
+
+  $("a[data-action='boon-edit']").on("click", async (html) => {
+    let uuid = character.getFlag('pf2e-piety', $(html.target).parents('li[data-field]')[0].dataset.field);
+    let boon = fromUuidSync(uuid);
+    return boon.sheet.render(true);
+  });
+
+  $("a[data-action='boon-delete']").on("click", async (html) => {
+    let uuid = character.getFlag('pf2e-piety', $(html.target).parents('li[data-field]')[0].dataset.field);
+    let boon = fromUuidSync(uuid);
+    let d = new Dialog({
+      title: "Delete Item: " + boon.name,
+      content: "<p>Are you sure?</p><p>This Item will be permanently deleted and cannot be recovered.</p><p><i>This will also remove the item from its Piety Boon slot.</i></p>",
+      buttons: {
+        yes: {
+         icon: '<i class="fas fa-check"></i>',
+         label: "Yes",
+         callback: async () => await Item.deleteDocuments([boon.id], {parent: character})
+        },
+        no: {
+         icon: '<i class="fas fa-times"></i>',
+         label: "No"
+        }
+       },
+       default: "no"
+    });
+    d.render(true);
   });
 });
 
