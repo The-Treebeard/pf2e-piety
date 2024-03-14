@@ -87,3 +87,7 @@ div.edict-anathema, ol.edict-anathema li {
 .thresholds span {
     margin-left: auto;
 }
+
+.active-threshold label, .active-threshold p, .active-threshold a {
+    text-shadow: #002a17 0 0 5px;
+}
