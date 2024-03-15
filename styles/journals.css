@@ -1,0 +1,28 @@
+form:has(> input[value="The Piety System"]) {
+    border: 10px ridge #bbb808;
+    background-color: rgba(187, 184, 8, 0.25);
+}
+input[value="The Piety System"] {
+    font-style: italic;
+}
+
+.info-box {
+    background-color: #eadcb7;
+    border: 2px solid #696245;
+    padding: 10px;
+    margin: 6px;
+}
+
+#secret-4NfDSDZV5pPhMNKF {
+    background-color: #003d12;
+    border: 3px inset gray;
+    padding: 5px;
+    margin: 4px;
+}
+#secret-4NfDSDZV5pPhMNKF h2 {
+    color: white;
+    border-bottom: 1px solid lightgray;
+}
+#secret-4NfDSDZV5pPhMNKF p {
+    color: white;
+}

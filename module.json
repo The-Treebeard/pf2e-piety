@@ -25,7 +25,8 @@
     "scripts/piety-section.js"
   ],
   "styles": [
-    "styles/pf2e-piety.css"
+    "styles/pf2e-piety.css",
+    "styles/journals.css"
   ],
   "packs": [
     {
