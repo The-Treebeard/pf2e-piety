@@ -13,16 +13,21 @@ input[value="The Piety System"] {
     margin: 6px;
 }
 
-#secret-4NfDSDZV5pPhMNKF {
-    background-color: #003d12;
+/* Helpful Tips for Game Masters */
+#secret-4NfDSDZV5pPhMNKF, #secret-bnlNjtSfer3Eqe9C, #secret-yXYAjEzZUU2nOJa9 {
+    background-color: rgb(0, 61, 18);
     border: 3px inset gray;
     padding: 5px;
     margin: 4px;
 }
-#secret-4NfDSDZV5pPhMNKF h2 {
+#secret-4NfDSDZV5pPhMNKF h2, #secret-yXYAjEzZUU2nOJa9 h3 {
     color: white;
     border-bottom: 1px solid lightgray;
 }
-#secret-4NfDSDZV5pPhMNKF p {
+#secret-4NfDSDZV5pPhMNKF p, #secret-bnlNjtSfer3Eqe9C p, #secret-yXYAjEzZUU2nOJa9 p {
     color: white;
+}
+#secret-4NfDSDZV5pPhMNKF.revealed, #secret-bnlNjtSfer3Eqe9C.revealed, #secret-yXYAjEzZUU2nOJa9.revealed {
+    background-color: rgba(0, 61, 18, 0.9);
+    border-style: outset;
 }
