@@ -18,7 +18,8 @@
   "description": "This module adapts the Piety system from DnD5e using Pathfinder 2nd Edition's Victory Points subsystem.\nA Piety section is added to the Effects tab of the player character sheet, with the ability to drag and drop the deity and boons that the piety system grants.",
   "authors": [
     {
-      "name": "Treebeard"
+      "name": "Treebeard",
+      "discord": "the_treebeard"
     }
   ],
   "esmodules": [
@@ -49,6 +50,11 @@
   ],
   "system": "pf2e",
   "url": "https://github.com/The-Treebeard/pf2e-piety",
+  "manifest": "https://github.com/The-Treebeard/pf2e-piety/releases/latest/download/module.json",
+  "download": "https://github.com/The-Treebeard/pf2e-piety/archive/refs/tags/11.0.0.zip",
   "license": "/LICENSE",
-  "readme": "/README.md"
+  "readme": "/README.md",
+  "issues": "https://github.com/The-Treebeard/pf2e-piety/issues",
+  "changelog": "/CHANGELOG.md",
+  
 }
