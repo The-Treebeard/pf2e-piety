@@ -11,12 +11,14 @@
             <span>{{localize "Pf2ePiety.Deity"}}</span>
         </h2>
         {{#if deity}}
-            <h3 class="attribute deity-info">
-                <span>{{deity.name}}</span>
-                <div class="deity-emblem">
-                    <img src="{{deity.img}}" alt="{{deity.name}}" />
-                </div>
-            </h3>
+            <a data-action="edit-deity">
+                <h3 class="attribute deity-info">
+                    <span>{{deity.name}}</span>
+                    <div class="deity-emblem">
+                        <img src="{{deity.img}}" alt="{{deity.name}}" />
+                    </div>
+                </h3>
+            </a>
         {{else}}
             <h3>{{localize "Pf2ePiety.MissingDeity"}}</h3>
         {{/if}}

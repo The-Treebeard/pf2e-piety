@@ -150,8 +150,14 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   });
   let divineList = $('section.tab.effects ol.effects-list');
   divineList[divineList.length-1].insertAdjacentHTML('afterend', pietyTemplate);
+
+  // Deity Actions
+  $("a[data-action='edit-deity']").on("click", () => {
+    let deity = fromUuidSync(character.deity.uuid);
+    return deity.sheet.render(true);
+  });
   
-  // Piety Score Updates
+  // Piety Score Actions
   $("div.piety-score-modifier button[data-action='piety-score-decrease']").on("click", async (event) => {
     if (character.getFlag('pf2e-piety', 'pietyScore') > 1) {
       Pf2ePiety.incrementPiety(character, -1);
@@ -161,9 +167,8 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
   $("div.piety-score-modifier button[data-action='piety-score-increase']").on("click", async (event) => {
     Pf2ePiety.incrementPiety(character, 1);
   });
-  // End of Piety Score Updates
 
-  // Edicts/Anathema Updates
+  // Edicts/Anathema Actions
   $("div[data-field] a[data-action='add-piety-edict-anathema']").on("click", async (html) => {
     if ($(html.target).parents('div[data-field]').data('field') == 'edicts') {
     await character.flags['pf2e-piety'].edicts.push("");
@@ -211,7 +216,7 @@ Hooks.on("renderCharacterSheetPF2e", async (charactersheet, html, data) => {
     Pf2ePiety.dropTarget = null;
   });
 
-  $("a[data-action='boon-edit']").on("click", async (html) => {
+  $("a[data-action='boon-edit']").on("click", (html) => {
     let uuid = character.getFlag('pf2e-piety', $(html.target).parents('li[data-field]')[0].dataset.field);
     let boon = fromUuidSync(uuid);
     return boon.sheet.render(true);
