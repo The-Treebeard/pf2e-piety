@@ -8,7 +8,7 @@ Typically player characters will progress at an average of 1 Piety Point per ses
 
 A Piety section is added to the Effects tab of a character sheet, just below Divine Intercessions. It includes the Deity and Piety Score, as well as the ability to add edicts & anathemas. You can drag and drop Effects onto the Piety thresholds. These will be deactivated until the character's Piety Score reaches the appropriate threshold.
 
-| ![Player View](/Player-View.jpg) | ![GM View](/GM-View.jpg) |
+| ![Player View](/Player-View.png) | ![GM View](/GM-View.png) |
 |:-------------------------------------------------------:|:-----------------------------------------------:|
 |                      _Player View_                      |                    _GM View_                    |
 
